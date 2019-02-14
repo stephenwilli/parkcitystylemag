@@ -1,0 +1,77 @@
+.post-meta {
+
+	h1 {
+		color: $primary;
+	}
+
+	h4 {
+		color: $secondary;
+		font-size: 1.3rem;
+	}
+}
+
+.elementor-content {
+	margin-top: 25px;
+}
+
+.nav-card {
+	i {
+		color: $secondary;
+	}
+
+	h3 {
+		margin-top: 20px;
+	}
+}
+
+.edition-wrap {
+	iframe {
+		width: 100% !important;
+		height: 800px !important;
+	}
+}
+
+.breadcrumb {
+	background-color: $white;
+	margin-bottom: 25px;
+}
+
+.post-share {
+
+	h3 {
+		color: lightgrey;
+		margin-top: 5px;
+	}
+
+	ul {
+		list-style: none;
+		text-align: center;
+		display: inline-block;
+
+		li {
+			display: inline-block;
+			float: left;
+			margin-right: 50px;
+		}
+	}
+
+	span {
+		@include heading-font;
+		font-size: 1.3rem;
+		margin-left: 15px;
+	}
+
+	i {
+		font-size: 2rem;
+	}
+
+	a {
+		color: lightgrey;
+		opacity: 1;
+	  @include transition($transition300);
+
+		&:hover {
+			opacity: .6;
+		}
+	}
+}

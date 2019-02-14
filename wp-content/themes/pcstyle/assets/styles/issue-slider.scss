@@ -1,0 +1,76 @@
+.issue-wrapper {
+  position: relative;
+  margin-top: 0;
+  width: 100%;
+  overflow: hidden;
+  
+
+
+  @include respond-to($screen-sm){
+    height: 60vh;
+  }
+  
+  @include respond-to($screen-xs){
+    margin-top: 30px;
+  }
+
+  .slides {
+      li {
+        position: inherit;
+        display: block;
+        height: 88vh;
+        
+        @include respond-to($screen-sm){
+          height: 60vh;
+        }
+      
+      h2 {
+        color: $white;
+      }
+  }
+
+  .issue-cover {
+    position: relative;
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+
+      @include respond-to($screen-sm){
+        min-height: 0;
+       
+      } 
+  }
+  
+  .overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.3);
+  } 
+
+  .caption {
+    position: absolute;
+    z-index: 10;
+    width: 85%;
+    background-color: rgba(40, 49, 63, .8);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: left; 
+    left: 0%;
+    bottom: 10%;
+    padding-left: 10%;
+    padding-right: 20px;
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+  }
+  
+
+} }

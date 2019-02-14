@@ -1,0 +1,162 @@
+/* VARIABLES */
+
+$transition200: all .2s ease-in;
+$transition300: all .3s ease-in;
+$transition: all .4s ease-in;
+
+/* COLORS */
+$white: #FFF;
+$black: #000;
+$grey: #808285;
+$primary: #28313f;
+$secondary: #ae9b7a;
+
+$features: #ae9b7a;
+$inspire: #715e50;
+$highstyle-profile: #252025;
+$basecamp: #999;
+$teton-village: #b31217;
+$healthy-living: #616050;
+$dining: #ae9b7a;
+$nightlife: #000;
+$teton-valley: #462607;
+$catalogue: #28313f;
+
+
+
+/* FONT FAMILIES */
+@mixin heading-font($weight: 700) {
+  font-family: 'Bebas Neue', sans-serif;
+  font-style: normal;
+}
+
+@mixin copy-font($weight: 400) {
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: $weight;
+}
+
+
+
+/* SCREEN SIZE */
+$screen-tiny: 480px;
+$screen-xxs: 600px;
+$screen-xs: 768px;
+$screen-sm: 992px;
+$screen-md: 1200px;
+$screen-lg: 1350px;
+$screen-xl: 1440px;
+
+// Options
+// $screen-xxs  
+// $screen-xs 
+// $screen-sm 
+// $screen-md
+// $screen-lg
+//
+
+@mixin respond-to($breakpoint) {
+  @media all and (max-width: ($breakpoint)) {
+    @content
+  }
+}
+
+@mixin respond-between($min, $max) {
+  @media all and (min-width:$min) and (max-width:$max) {
+    @content
+  }
+}
+
+
+/* set Cols to equal height
+==================================== */
+.row-eq-height{
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  &.-auto-md {
+  	@include respond-to($screen-md) {
+			display: block;
+		}
+  }
+  &.-auto-sm {
+  	@include respond-to($screen-sm) {
+			display: block;
+		}
+  }
+  &.-auto-xs {
+  	@include respond-to($screen-xs) {
+			display: block;
+		}
+  }
+  &.-auto-xxs {
+  	@include respond-to($screen-xxs) {
+			display: block;
+		}
+  }
+}
+
+/* BOOTSTRAP NO-GUTTER
+================================== */
+.nopad {
+  padding: 0px !important;
+  margin:  0px !important;
+  .row {
+    margin: 0px !important
+  }
+    [class*="col-"] {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left : 0 !important;
+      margin-right: 0 !important;
+
+    }
+}
+
+.no-gutter {
+  margin : 0;
+  padding: 0;
+  &.container-fluid,
+  &.container {
+    padding: 0;
+    .row {
+      margin-left: 0;
+      margin-right: 0;
+      [class*='col-'] {
+        &,
+        &:not(:first-child),
+        &:not(:last-child) {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    }
+  }
+}
+
+/* CREATES NEW BOOTSTRAP EXTRA EXTRA SMALL CLASSES
+==================================== */
+@media only screen and (max-width: 600px) {
+   @include make-grid(xxs);
+}
+
+
+/*
+Transform
+@include transform(translateY(-50%));
+--------------------- */
+@mixin transform( $transform-props ) {
+  -webkit-transform: $transform-props;
+  -moz-transform: $transform-props;
+  -ms-transform: $transform-props;
+  -o-transform: $transform-props;
+  transform: $transform-props;
+}
+
+.verticalcenter {
+  top: 50%;
+
+  @include transform(translate(0,50%));
+
+}

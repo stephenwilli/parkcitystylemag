@@ -1,0 +1,232 @@
+/* BASE STYLES */
+
+html {
+  -webkit-font-smoothing:antialiased;
+  font-size: 14px;
+  @include respond-to($screen-sm) { font-size: 15px; }
+  @include respond-to($screen-xxs) { font-size: 12px; }
+  overflow-x: hidden;
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio:1.25), only screen and (min-device-pixel-ratio:1.25), only screen and (min-resolution:200dpi), only screen and (min-resolution:1.25dppx) { -webkit-font-smoothing: subpixel-antialiased; }
+
+body {
+  @include copy-font();
+  background-color: $white;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 2;
+  margin-bottom: 1rem;
+
+  // @include respond-to($screen-sm){
+  //   font-size: 1.3rem;
+  //   line-height: 1.7;
+  // }
+}
+
+hr {
+  border-width: 2px;
+  max-width: 60%;
+}
+
+hr.light {
+  border-color: white;
+}
+
+a {
+
+  @include transition(all .2s ease-in);
+  color: $primary;
+  cursor: pointer !important;
+}
+
+a:hover,
+a:focus,
+a:active {
+  color: $grey;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+  color : $white;
+  @include heading-font();
+  margin-bottom: 1.5rem;
+}
+
+h4, h5, h6 {
+  margin-top: 0;
+  color : $white;
+  @include copy-font();
+  margin-bottom: 1.5rem;
+}
+
+h1,
+.h1 {
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+h2,
+.h2 {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  color: $secondary;
+}
+
+h3,
+.h3 {
+  font-size: 2rem;
+  line-height: 2rem;
+  font-weight: bold;
+  color: $primary;
+}
+
+h4,
+.h4 {
+  font-size: 1.5rem;
+}
+
+h5,
+.h5 {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+ul {
+  color: $grey;
+  li {
+    margin-bottom: 5px;
+  }
+}
+
+img.alignleft {
+  float: left;
+  margin-right: 25px;
+  margin-bottom: 25px;
+}
+
+img.alignright {
+  float: right;
+  margin-bottom: 25px;
+  margin-left: 25px;
+}
+
+.bg-secondary {
+  background-color: $white;
+  p, h1, h2, h3, h4, h5 {
+    color: $grey;
+  }
+}
+
+.bg-primary {
+  background-color: $primary;
+  p, h1, h2, h3 {
+    color: #fff;
+  }
+
+  a {
+    @include transition(all .2s ease-in);
+    color: $white;
+  }
+
+  a:hover,
+  a:focus,
+  a:active {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.page-content {
+  margin: 50px 0;
+  padding-bottom: 50px;
+
+  @include respond-to($screen-sm) {
+    padding: 35px;
+    margin: 0;
+  }
+
+}
+
+.normal-pad {
+  padding: 30px 0;
+}
+
+.center {
+  text-align: center;
+}
+
+::-moz-selection {
+  color: white;
+  text-shadow: none;
+  background: $grey;
+}
+
+::selection {
+  color: white;
+  text-shadow: none;
+  background: $grey;
+}
+
+img::selection {
+  color: white;
+  background: transparent;
+}
+
+img::-moz-selection {
+  color: white;
+  background: transparent;
+}
+
+h3 {
+
+    &.features{
+      color: $features;
+    }
+
+    &.inspire {
+      color: $inspire;
+    }
+
+    &.highstyle-profile {
+      color: $highstyle-profile;
+    }
+
+    &.basecamp {
+     color: $basecamp;
+    }
+
+    &.teton-village {
+      color:$teton-village;
+    }
+
+    &.healthy-living {
+      color: $healthy-living;
+    }
+
+    &.dining {
+      color:$dining;
+    }
+
+    &.nightlife {
+      color: $nightlife;
+    }
+
+    &.teton-valley {
+      color: $teton-valley;
+    }
+
+    &.catalogue {
+      color: $catalogue;
+    }
+
+  }

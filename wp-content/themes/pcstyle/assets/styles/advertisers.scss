@@ -1,0 +1,92 @@
+.advertiser-slider {
+  
+  .advertiser-logo {
+    height: 150px;
+    img {
+      -webkit-filter: grayscale(1);
+      filter: grayscale(1);
+      opacity: .6;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 65%;
+      transform: translate(-50%, -50%);
+      max-height: 100%;
+    }
+  }
+
+
+
+  .flex-direction-nav  {
+
+    .flex-next {
+      background-position: 100% 0;
+      right: -30px;
+      
+      &:before {
+        font-family: "fontawesome";
+        font-size: 4rem;
+        color: $black;
+        content:"\f105" !important;
+      }
+        
+    }
+
+    .flex-prev {
+      background-position: 100% 0;
+      left: -30px;
+      
+      &:before {
+        font-family: "fontawesome";
+        font-size: 4rem;
+        color: $black;
+        content:"\f104" !important;
+      }
+        
+    }
+
+
+}
+}
+
+.ads-btn {
+  margin-top: 60px;
+}
+
+
+.advertiser-card {
+  margin-bottom: 105px;
+  padding: 0 20px;
+  position: relative;
+  
+  .advertiser-logo {
+
+    height: 100px;
+    opacity: 1;
+    @include transition($transition300);
+
+    &:hover {
+      opacity: .6;
+    }
+
+    img {
+      max-height: 100px;
+      margin: 0 auto;
+      display: block;
+      opacity: 1;
+      @include transition($transition300);
+    }
+
+  }
+
+  h3 {
+    margin-top: 25px;
+    font-size: 1.6rem;
+  }
+}
+
+
+
+
+
+

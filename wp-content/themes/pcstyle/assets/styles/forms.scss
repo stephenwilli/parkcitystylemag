@@ -1,0 +1,71 @@
+// ALL FORMS
+
+.gform_wrapper {
+
+  .top_label .gfield_label, 
+  .field_sublabel_below .ginput_complex.ginput_container label {
+    display: none !important;
+  }
+  
+  input, textarea {
+    border: 2px solid $grey;
+  }
+  
+  input[type=submit] {
+    background-color: $primary;
+    display: inline-block;
+    padding: 10px 50px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    color: $white;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border: 2px $primary solid;
+    @include transition($transition300);
+    
+    @include respond-to($screen-xs) { 
+      font-size: 1.5rem;
+    }
+
+    &:hover {
+      background-color: transparent;
+      color: $primary;
+      text-decoration: none;
+    }
+  }
+}
+
+// CONTACT
+
+#gform_wrapper_1 { 
+
+  .ginput_container.ginput_container_email {
+  width: 49%;
+  margin-right: 15px;
+  float: left;
+  clear: none;
+  }
+
+  input#input_1_2, input#input_1_3 {
+    width: 100%;
+  }
+
+  li#field_1_3 {
+      float: left;
+      clear: none;
+      width: 50%;
+      margin-top: 0;
+      margin-bottom: 20px;
+  }
+
+}
+
+
+
+
+
+
+
+

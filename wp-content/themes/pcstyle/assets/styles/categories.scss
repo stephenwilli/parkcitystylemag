@@ -1,0 +1,125 @@
+.category-hero {
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  @include respond-to($screen-md) { 
+    height: 300px;
+  }
+
+
+  img {
+    width: 100%;
+  }
+
+  .category-title {
+    position: absolute;
+    bottom: 0;
+    background-color: rgba(40, 49, 63, .6);
+    padding: 20px 80px;
+    // width: 400px;
+    text-align: center;
+    margin: 0;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, 0);
+  }
+
+  &.features{
+    .category-title {
+      background-color: rgba($features, .65);
+    }
+  }
+  
+  &.inspire {
+    .category-title {
+      background-color: rgba($inspire, .6);
+    }
+  }
+  
+  &.highstyle-profile {
+    .category-title {
+      background-color: rgba($highstyle-profile, .65);
+    }
+  }
+
+  &.basecamp {
+    .category-title {
+      background-color: rgba($basecamp, .65);
+    }
+  }
+
+  &.teton-village {
+    .category-title {
+      background-color: rgba($teton-village, .65);
+    }
+  }
+
+  &.healthy-living {
+    .category-title {
+      background-color: rgba($healthy-living, .65);
+    }
+  }
+
+  &.dining {
+    .category-title {
+      background-color: rgba($dining, .65);
+    }
+  }
+
+  &.nightlife {
+    .category-title {
+      background-color: rgba($nightlife, .65);
+    }
+  }
+
+  &.teton-valley {
+    .category-title {
+      background-color: rgba($teton-valley, .65);
+    }
+  }
+
+  &.catalogue {
+    .category-title {
+      background-color: rgba($catalogue, .65);
+    }
+  }
+
+}
+
+.archive-card {
+  width: 50%;
+  float: left;
+  clear: none;
+  padding: 0 15px;
+  margin-bottom: 30px;
+  height: 700px;
+
+  @include respond-to($screen-sm) { 
+    width: 100%;
+    height: auto;
+  }
+
+  .edition-title {
+    margin-top: 25px;
+  }
+
+  h3 {
+    margin-bottom: .5rem;
+  }
+}
+
+.edition-archive {
+  height: auto;
+  margin-bottom: 60px;
+}
+
+
+
+
+
+
+

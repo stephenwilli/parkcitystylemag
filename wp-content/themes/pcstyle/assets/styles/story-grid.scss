@@ -1,0 +1,171 @@
+.grid-card {
+  margin-bottom: 30px;
+  position: relative;
+
+  @include respond-to($screen-sm){
+    img {  
+      width: 100%;
+    }
+
+  }
+
+  .block-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  .category-bar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-color: rgba($features, .5);
+    padding: 10px 20px;
+    color: $white;
+    margin-bottom: 10px;
+    width: 60%;
+    @include transition($transition300);
+
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    background-color: rgba($features, .5);
+    @include transition($transition300);
+  }
+
+  &:hover {
+
+    .category-bar {
+      width: 100%;
+      @include transition($transition300);
+
+      .btn {
+        opacity: 1;
+      }
+    }
+
+    .overlay {
+      opacity: 1;
+    }
+
+    img {
+      -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+      filter: grayscale(100%);
+      @include transition($transition300);
+
+    }
+  }
+
+  &.features {
+    height: 100%;
+    background-size: cover;
+    background-position: center center;
+
+    @include respond-to($screen-sm){
+      width: 100%;
+
+    }
+    
+    .category-bar {
+      background-color: $features;
+    }
+    .overlay {
+      background-color: rgba($features, .5);
+    }
+  }
+  
+  &.inspire {
+    .category-bar {
+      background-color: $inspire;
+    }
+    .overlay {
+      background-color: rgba($inspire, .6);
+    }
+  }
+  
+  &.highstyle-profile {
+    .category-bar {
+      background-color: $highstyle-profile;
+    }
+    .overlay {
+      background-color: rgba($highstyle-profile, .5);
+    }
+  }
+
+  &.basecamp {
+    .category-bar {
+      background-color: $basecamp;
+    }
+    .overlay {
+      background-color: rgba($basecamp, .5);
+    }
+  }
+
+  &.teton-village {
+    .category-bar {
+      background-color: $teton-village;
+    }
+    .overlay {
+      background-color: rgba($teton-village, .5);
+    }
+  }
+
+  &.healthy-living {
+    .category-bar {
+      background-color: $healthy-living;
+    }
+    .overlay {
+      background-color: rgba($healthy-living, .5);
+    }
+  }
+
+  &.dining {
+    .category-bar {
+      background-color: $dining;
+    }
+    .overlay {
+      background-color: rgba($dining, .5);
+    }
+  }
+
+  &.nightlife {
+    .category-bar {
+      background-color: $nightlife;
+    }
+    .overlay {
+      background-color: rgba($nightlife, .5);
+    }
+  }
+
+  &.teton-valley {
+    .category-bar {
+      background-color: $teton-valley;
+    }
+    .overlay {
+      background-color: rgba($teton-valley, .5);
+    }
+  }
+
+  &.catalogue {
+    .category-bar {
+      background-color: $catalogue;
+    }
+    .overlay {
+      background-color: rgba($catalogue, .5);
+    }
+  }
+
+}
+
+.uneven {
+  height: 550px;
+}

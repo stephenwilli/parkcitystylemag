@@ -1,0 +1,241 @@
+.flexslider {
+  margin-bottom: 0;
+  border: none;
+  border-radius: inherit;
+
+  .hero-caption {
+    position: absolute;
+    z-index: 10;
+    width: 75%;
+    background-color: rgba(174, 155, 122, .8);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    
+ 
+    &.caption-left {
+      text-align: left; 
+      left: 0%;
+      bottom: -5%;
+      padding-left: 10%;
+      padding-right: 20px;
+
+    }
+
+    &.caption-right {
+      text-align: right;
+      right: 0%;
+      bottom: -5%;
+      padding-left: 20px;
+      padding-right: 10%;
+    }
+
+    &.caption-center {
+      bottom: -5%;
+      transform: translateY(-50%);
+      width: 100%;
+      text-align: center;
+      
+      @include respond-to($screen-sm){
+       padding: 0;
+      }
+
+    }
+    
+    @include respond-to($screen-sm){
+      padding-left: 10% !important;
+      padding-right: 10% !important;
+      padding-bottom: 5% !important;
+      width: 100%;
+      text-align: center !important;
+
+    }
+
+
+    .btn {
+      margin: 15px 0;
+    }
+
+    p {
+      color: $white;
+      margin-bottom: 5px;
+      font-size: 1.2rem;
+    }
+  
+    h1 {
+      margin-bottom: 0;
+      position: relative;
+
+      @include respond-to($screen-sm){
+        font-size: 2rem;
+      }
+
+    }
+
+  }
+  
+  .slides li {
+    position: relative;
+  }
+
+}
+
+#single-hero {
+  position: relative;
+  margin-top: 0;
+  width: 100%;
+  overflow: hidden;
+  height: 500px !important;
+  min-height: 500px !important;
+}
+
+#hero-slider {
+  position: relative;
+  margin-top: 0;
+  width: 100%;
+  overflow: hidden;
+  height: 100vh;
+
+  @include respond-to($screen-sm){
+    height: 60vh;
+  }
+  
+  @include respond-to($screen-xs){
+    margin-top: 30px;
+  }
+
+  .slides {
+      li {
+        position: inherit;
+        display: block;
+        height: 88vh;
+        
+        @include respond-to($screen-sm){
+          height: 60vh;
+        }
+      }
+
+  .hero-bg{
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+
+      @include respond-to($screen-sm){
+        min-height: 0;
+       
+      }
+  }
+  .flex-control-nav {
+    position: relative;
+    z-index: 10;
+    bottom: 40px;
+
+    @include respond-to($screen-xxs){
+      display: none;
+    }
+  }
+
+  .flex-direction-nav {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    margin-top: -30px;
+
+    a {
+      height: 55px;
+      color: rgba(255,255,255, 0.8);
+      &:hover {
+        color: #fff;
+      }
+
+      &.flex-prev:before{
+        font-family: "font-awesome";
+        font-size: 3rem;
+        content: "\f105";
+      }
+
+      &.flex-next:before{
+        font-size: 3rem;
+        font-family: "tmbricons";
+        content: "\EA04";
+      }
+    }
+
+    @include respond-to($screen-sm){
+      top: -250px;
+    }
+    @include respond-to($screen-xs){
+      top: -200px;
+    }
+    @include respond-to($screen-xxs){
+      display: none;
+    }
+
+  }
+
+  .flex-control-paging {
+
+    li {
+
+      @include respond-to($screen-xxs){
+          margin: 0 4px;
+      }
+
+      a {
+        background: rgba(255, 255, 255, 0.8);
+        height: 16px;
+        width: 16px;
+
+        // &.flex-active {
+          
+        // }
+
+        @include respond-to($screen-xxs){
+          width: 12px;
+          height: 12px;
+        }
+      }
+
+    }
+  }
+
+}}
+
+.flexslider {
+
+.flex-direction-nav  {
+  a {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .flex-next {
+    background-position: 100% 0;
+    right: -30px;
+    
+    &:before {
+      font-family: "fontawesome";
+      font-size: 4rem;
+      color: $white;
+      content:"\f105" !important;
+    }
+      
+  }
+
+  .flex-prev {
+    background-position: 100% 0;
+    left: -30px;
+    
+    &:before {
+      font-family: "fontawesome";
+      font-size: 4rem;
+      color: $white;
+      content:"\f104" !important;
+    }
+      
+  }
+} 
+
+}

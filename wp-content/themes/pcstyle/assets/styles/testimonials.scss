@@ -1,0 +1,25 @@
+.testimonial-wrap {
+  margin-top: 35px;
+
+  h3 {
+    text-align: center;
+  }
+  
+  span {
+    position: relative;
+    p {
+      color: $primary;
+      font-size: 18px;
+      font-weight: 400;
+      text-align: center;
+    }
+  }
+
+  .name {
+    color: $secondary;
+    font-weight: bold;
+    text-align: center;
+    font-size: 18px;
+
+  }
+}
