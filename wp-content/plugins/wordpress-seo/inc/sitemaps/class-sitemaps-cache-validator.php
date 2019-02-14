@@ -1,5 +1,7 @@
 <?php
 /**
+ * WPSEO plugin file.
+ *
  * @package WPSEO\XML_Sitemaps
  */
 
@@ -10,13 +12,25 @@
  */
 class WPSEO_Sitemaps_Cache_Validator {
 
-	/** @var string Prefix of the transient key for sitemap caches */
+	/**
+	 * Prefix of the transient key for sitemap caches.
+	 *
+	 * @var string
+	 */
 	const STORAGE_KEY_PREFIX = 'yst_sm_';
 
-	/** Name of the option that holds the global validation value */
+	/**
+	 * Name of the option that holds the global validation value.
+	 *
+	 * @var string
+	 */
 	const VALIDATION_GLOBAL_KEY = 'wpseo_sitemap_cache_validator_global';
 
-	/** The format which creates the key of the option that holds the type validation value */
+	/**
+	 * The format which creates the key of the option that holds the type validation value.
+	 *
+	 * @var string
+	 */
 	const VALIDATION_TYPE_KEY_FORMAT = 'wpseo_sitemap_%s_cache_validator';
 
 	/**
@@ -80,7 +94,7 @@ class WPSEO_Sitemaps_Cache_Validator {
 		 * We need to use a timeout on the transient, otherwise the values get autoloaded, this adds
 		 * another restriction to the length.
 		 */
-		$max_length = 45; // 64 - 19 ('_transient_timeout_')
+		$max_length  = 45; // 64 - 19 ('_transient_timeout_')
 		$max_length -= strlen( $prefix );
 		$max_length -= strlen( $postfix );
 
@@ -177,6 +191,8 @@ class WPSEO_Sitemaps_Cache_Validator {
 		// Delete transients.
 		$query = sprintf( 'DELETE FROM %1$s WHERE %2$s', $wpdb->options, implode( ' OR ', $where ) );
 		$wpdb->query( $query );
+
+		wp_cache_delete( 'alloptions', 'options' );
 	}
 
 	/**

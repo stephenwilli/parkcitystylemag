@@ -6,13 +6,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Menu Anchor Widget
+ * Elementor menu anchor widget.
+ *
+ * Elementor widget that allows to link and menu to a specific position on the
+ * page.
+ *
+ * @since 1.0.0
  */
 class Widget_Menu_Anchor extends Widget_Base {
 
 	/**
+	 * Get widget name.
+	 *
 	 * Retrieve menu anchor widget name.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget name.
@@ -22,8 +30,11 @@ class Widget_Menu_Anchor extends Widget_Base {
 	}
 
 	/**
+	 * Get widget title.
+	 *
 	 * Retrieve menu anchor widget title.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget title.
@@ -33,8 +44,11 @@ class Widget_Menu_Anchor extends Widget_Base {
 	}
 
 	/**
+	 * Get widget icon.
+	 *
 	 * Retrieve menu anchor widget icon.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget icon.
@@ -44,16 +58,17 @@ class Widget_Menu_Anchor extends Widget_Base {
 	}
 
 	/**
-	 * Retrieve the list of categories the menu anchor widget belongs to.
+	 * Get widget keywords.
 	 *
-	 * Used to determine where to display the widget in the editor.
+	 * Retrieve the list of keywords the widget belongs to.
 	 *
+	 * @since 2.1.0
 	 * @access public
 	 *
-	 * @return array Widget categories.
+	 * @return array Widget keywords.
 	 */
-	public function get_categories() {
-		return [ 'general-elements' ];
+	public function get_keywords() {
+		return [ 'menu', 'anchor', 'link' ];
 	}
 
 	/**
@@ -61,6 +76,7 @@ class Widget_Menu_Anchor extends Widget_Base {
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _register_controls() {
@@ -72,21 +88,22 @@ class Widget_Menu_Anchor extends Widget_Base {
 		);
 
 		$this->add_control(
-			'anchor_description',
-			[
-				'raw' => __( 'This ID will be the CSS ID you will have to use in your own page, Without #.', 'elementor' ),
-				'type' => Controls_Manager::RAW_HTML,
-				'content_classes' => 'elementor-descriptor',
-			]
-		);
-
-		$this->add_control(
 			'anchor',
 			[
 				'label' => __( 'The ID of Menu Anchor.', 'elementor' ),
 				'type' => Controls_Manager::TEXT,
 				'placeholder' => __( 'For Example: About', 'elementor' ),
+				'description' => __( 'This ID will be the CSS ID you will have to use in your own page, Without #.', 'elementor' ),
 				'label_block' => true,
+			]
+		);
+
+		$this->add_control(
+			'anchor_note',
+			[
+				'type' => Controls_Manager::RAW_HTML,
+				'raw' => sprintf( __( 'Note: The ID link ONLY accepts these chars: %s', 'elementor' ), '`A-Z, a-z, 0-9, _ , -`' ),
+				'content_classes' => 'elementor-panel-alert elementor-panel-alert-warning',
 			]
 		);
 
@@ -98,13 +115,14 @@ class Widget_Menu_Anchor extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function render() {
-		$anchor = $this->get_settings( 'anchor' );
+		$anchor = $this->get_settings_for_display( 'anchor' );
 
 		if ( ! empty( $anchor ) ) {
-			$this->add_render_attribute( 'inner', 'id', $anchor );
+			$this->add_render_attribute( 'inner', 'id', sanitize_html_class( $anchor ) );
 		}
 
 		$this->add_render_attribute( 'inner', 'class', 'elementor-menu-anchor' );
@@ -118,6 +136,7 @@ class Widget_Menu_Anchor extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _content_template() {

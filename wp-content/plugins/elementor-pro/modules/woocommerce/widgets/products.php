@@ -2,69 +2,48 @@
 namespace ElementorPro\Modules\Woocommerce\Widgets;
 
 use Elementor\Controls_Manager;
-use ElementorPro\Base\Base_Widget;
+use Elementor\Controls_Stack;
 use ElementorPro\Modules\QueryControl\Controls\Group_Control_Posts;
 use ElementorPro\Modules\QueryControl\Module;
-use ElementorPro\Modules\Woocommerce\Skins;
+use ElementorPro\Modules\Woocommerce\Classes\Products_Renderer;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
-class Products extends Base_Widget {
-
-	/**
-	 * @var \WP_Query
-	 */
-	private $query = null;
-
-	protected $_has_template_content = false;
+class Products extends Products_Base {
 
 	public function get_name() {
-		return 'wc-products';
+		return 'woocommerce-products';
 	}
 
 	public function get_title() {
-		return __( 'Woo - Products', 'elementor-pro' );
+		return __( 'Products', 'elementor-pro' );
 	}
 
 	public function get_icon() {
-		return 'eicon-woocommerce';
+		return 'eicon-products';
+	}
+
+	public function get_keywords() {
+		return [ 'woocommerce', 'shop', 'store', 'product', 'archive' ];
+	}
+
+	public function get_categories() {
+		return [
+			'woocommerce-elements',
+		];
 	}
 
 	public function on_export( $element ) {
-		$element = Group_Control_Posts::on_export_remove_setting_from_element( $element, 'posts' );
+		$element = Group_Control_Posts::on_export_remove_setting_from_element( $element, 'query' );
+
 		return $element;
 	}
 
-	public function get_query() {
-		return $this->query;
-	}
-
-	protected function _register_skins() {
-		$this->add_skin( new Skins\Skin_Classic( $this ) );
-	}
-
-	protected function _register_controls() {
+	protected function register_query_controls() {
 		$this->start_controls_section(
-			'section_layout',
-			[
-				'label' => __( 'Layout', 'elementor-pro' ),
-				'tab' => Controls_Manager::TAB_CONTENT,
-			]
-		);
-
-		$this->add_control(
-			'posts_per_page',
-			[
-				'label' => __( 'Products Count', 'elementor-pro' ),
-				'type' => Controls_Manager::NUMBER,
-				'default' => '4',
-			]
-		);
-
-		$this->end_controls_section();
-
-		$this->start_controls_section(
-			'section_filter',
+			'section_query',
 			[
 				'label' => __( 'Query', 'elementor-pro' ),
 				'tab' => Controls_Manager::TAB_CONTENT,
@@ -74,8 +53,39 @@ class Products extends Base_Widget {
 		$this->add_group_control(
 			Group_Control_Posts::get_type(),
 			[
-				'name' => 'posts',
+				'name' => 'query',
 				'post_type' => 'product',
+				'fields_options' => [
+					'post_type' => [
+						'default' => 'product',
+						'options' => [
+							'current_query' => __( 'Current Query', 'elementor-pro' ),
+							'product' => __( 'Latest Products', 'elementor-pro' ),
+							'sale' => __( 'Sale', 'elementor-pro' ),
+							'featured' => __( 'Featured', 'elementor-pro' ),
+							'by_id' => _x( 'Manual Selection', 'Posts Query Control', 'elementor-pro' ),
+						],
+					],
+					'product_cat_ids' => [
+						'condition' => [
+							'query_post_type!' => [
+								'current_query',
+								'by_id',
+							],
+						],
+					],
+					'product_tag_ids' => [
+						'condition' => [
+							'query_post_type!' => [
+								'current_query',
+								'by_id',
+							],
+						],
+					],
+				],
+				'exclude' => [
+					'authors',
+				],
 			]
 		);
 
@@ -84,20 +94,6 @@ class Products extends Base_Widget {
 			[
 				'label' => __( 'Advanced', 'elementor-pro' ),
 				'type' => Controls_Manager::HEADING,
-			]
-		);
-
-		$this->add_control(
-			'filter_by',
-			[
-				'label' => __( 'Filter By', 'elementor-pro' ),
-				'type' => Controls_Manager::SELECT,
-				'default' => '',
-				'options' => [
-					'' => __( 'None', 'elementor-pro' ),
-					'featured' => __( 'Featured', 'elementor-pro' ),
-					'sale' => __( 'Sale', 'elementor-pro' ),
-				],
 			]
 		);
 
@@ -116,6 +112,9 @@ class Products extends Base_Widget {
 					'rand' => __( 'Random', 'elementor-pro' ),
 					'menu_order' => __( 'Menu Order', 'elementor-pro' ),
 				],
+				'condition' => [
+					'query_post_type!' => 'current_query',
+				],
 			]
 		);
 
@@ -126,8 +125,11 @@ class Products extends Base_Widget {
 				'type' => Controls_Manager::SELECT,
 				'default' => 'desc',
 				'options' => [
-					'asc'  => __( 'ASC', 'elementor-pro' ),
+					'asc' => __( 'ASC', 'elementor-pro' ),
 					'desc' => __( 'DESC', 'elementor-pro' ),
+				],
+				'condition' => [
+					'query_post_type!' => 'current_query',
 				],
 			]
 		);
@@ -137,69 +139,116 @@ class Products extends Base_Widget {
 		$this->end_controls_section();
 	}
 
-	public function query_posts() {
-		$settings = $this->get_settings();
-		$query_args = Module::get_query_args( 'posts', $settings );
-
-		// Default ordering args
-		$ordering_args = WC()->query->get_catalog_ordering_args( $settings['orderby'], $settings['order'] );
-
-		$query_args['orderby'] = $ordering_args['orderby'];
-		$query_args['order'] = $ordering_args['order'];
-
-		if ( ! empty( $ordering_args['meta_key'] ) ) {
-			$query_args['meta_key'] = $ordering_args['meta_key'];
-		}
-
-		if ( 'sale' === $settings['filter_by'] ) {
-			// From WooCommerce `sale_products` shortcode
-			$query_args['post__in'] = array_merge( [ 0 ], wc_get_product_ids_on_sale() );
-		}
-
-		if ( version_compare( WC()->version, '3.0.0', '>=' ) ) {
-			$query_args = $this->get_wc_visibility_parse_query( $query_args );
-		} else {
-			$query_args = $this->get_wc_legacy_visibility_parse_query( $query_args );
-		}
-
-		$this->query = new \WP_Query( $query_args );
-	}
-
-	private function get_wc_visibility_parse_query( $query_args ) {
-		$settings = $this->get_settings();
-		$product_visibility_term_ids = wc_get_product_visibility_term_ids();
-
-		if ( 'featured' === $settings['filter_by'] ) {
-			$query_args['tax_query'][] = [
-				'taxonomy' => 'product_visibility',
-				'field' => 'term_taxonomy_id',
-				'terms' => $product_visibility_term_ids['featured'],
-			];
-		}
-
-		return $query_args;
-	}
-
-	private function get_wc_legacy_visibility_parse_query( $query_args ) {
-		$settings = $this->get_settings();
-
-		$query_args['meta_query'] = [
+	protected function _register_controls() {
+		$this->start_controls_section(
+			'section_content',
 			[
-				'key' => '_visibility',
-				'value' => [ 'catalog', 'visible' ],
-				'compare' => 'IN',
-			],
-		];
+				'label' => __( 'Content', 'elementor-pro' ),
+			]
+		);
 
-		if ( 'featured' === $settings['filter_by'] ) {
-			// From WooCommerce `featured_products` shortcode
-			$query_args['meta_query'][] = [
-				'key' => '_featured',
-				'value' => 'yes',
-			];
+		$this->add_responsive_control(
+			'columns',
+			[
+				'label' => __( 'Columns', 'elementor-pro' ),
+				'type' => Controls_Manager::NUMBER,
+				'prefix_class' => 'elementor-products-columns%s-',
+				'min' => 1,
+				'max' => 12,
+				'default' => 4,
+				'required' => true,
+				'device_args' => [
+					Controls_Stack::RESPONSIVE_TABLET => [
+						'required' => false,
+					],
+					Controls_Stack::RESPONSIVE_MOBILE => [
+						'required' => false,
+					],
+				],
+				'min_affected_device' => [
+					Controls_Stack::RESPONSIVE_DESKTOP => Controls_Stack::RESPONSIVE_TABLET,
+					Controls_Stack::RESPONSIVE_TABLET => Controls_Stack::RESPONSIVE_TABLET,
+				],
+			]
+		);
+
+		$this->add_control(
+			'rows',
+			[
+				'label' => __( 'Rows', 'elementor-pro' ),
+				'type' => Controls_Manager::NUMBER,
+				'default' => 4,
+				'render_type' => 'template',
+				'range' => [
+					'px' => [
+						'max' => 20,
+					],
+				],
+			]
+		);
+
+		$this->add_control(
+			'paginate',
+			[
+				'label' => __( 'Pagination', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+			]
+		);
+
+		$this->add_control(
+			'allow_order',
+			[
+				'label' => __( 'Allow Order', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+				'condition' => [
+					'paginate' => 'yes',
+				],
+			]
+		);
+
+		$this->add_control(
+			'show_result_count',
+			[
+				'label' => __( 'Show Result Count', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'default' => '',
+				'condition' => [
+					'paginate' => 'yes',
+				],
+			]
+		);
+
+		$this->end_controls_section();
+
+		$this->register_query_controls();
+
+		parent::_register_controls();
+	}
+
+	protected function render() {
+
+		if ( WC()->session ) {
+			wc_print_notices();
 		}
 
-		return $query_args;
+		// For Products_Renderer.
+		if ( ! isset( $GLOBALS['post'] ) ) {
+			$GLOBALS['post'] = null; // WPCS: override ok.
+		}
+
+		$settings = $this->get_settings();
+
+		$shortcode = new Products_Renderer( $settings, 'products' );
+
+		$content = $shortcode->get_content();
+
+		if ( $content ) {
+			echo $content;
+		} elseif ( $this->get_settings( 'nothing_found_message' ) ) {
+			echo '<div class="elementor-nothing-found elementor-products-nothing-found">' . esc_html( $this->get_settings( 'nothing_found_message' ) ) . '</div>';
+		}
 	}
 
 	public function render_plain_content() {}

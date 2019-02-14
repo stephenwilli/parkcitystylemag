@@ -1,5 +1,7 @@
 <?php
 /**
+ * WPSEO plugin file.
+ *
  * @package WPSEO\Admin\ConfigurationUI
  */
 
@@ -8,10 +10,14 @@
  */
 class WPSEO_Configuration_Storage {
 
-	/** @var WPSEO_Configuration_Options_Adapter */
+	/**
+	 * @var \WPSEO_Configuration_Options_Adapter
+	 */
 	protected $adapter;
 
-	/** @var array WPSEO_Config_Field */
+	/**
+	 * @var \WPSEO_Config_Field[]
+	 */
 	protected $fields = array();
 
 	/**
@@ -47,7 +53,7 @@ class WPSEO_Configuration_Storage {
 		);
 
 		$post_type_factory = new WPSEO_Config_Factory_Post_Type();
-		$fields = array_merge( $fields, $post_type_factory->get_fields() );
+		$fields            = array_merge( $fields, $post_type_factory->get_fields() );
 
 		foreach ( $fields as $field ) {
 			$this->add_field( $field );

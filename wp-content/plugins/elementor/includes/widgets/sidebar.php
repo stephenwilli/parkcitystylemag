@@ -6,13 +6,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Sidebar Widget
+ * Elementor sidebar widget.
+ *
+ * Elementor widget that insert any sidebar into the page.
+ *
+ * @since 1.0.0
  */
 class Widget_Sidebar extends Widget_Base {
 
 	/**
+	 * Get widget name.
+	 *
 	 * Retrieve sidebar widget name.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget name.
@@ -22,8 +29,11 @@ class Widget_Sidebar extends Widget_Base {
 	}
 
 	/**
+	 * Get widget title.
+	 *
 	 * Retrieve sidebar widget title.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget title.
@@ -33,8 +43,11 @@ class Widget_Sidebar extends Widget_Base {
 	}
 
 	/**
+	 * Get widget icon.
+	 *
 	 * Retrieve sidebar widget icon.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget icon.
@@ -44,16 +57,17 @@ class Widget_Sidebar extends Widget_Base {
 	}
 
 	/**
-	 * Retrieve the list of categories the sidebar widget belongs to.
+	 * Get widget keywords.
 	 *
-	 * Used to determine where to display the widget in the editor.
+	 * Retrieve the list of keywords the widget belongs to.
 	 *
+	 * @since 2.1.0
 	 * @access public
 	 *
-	 * @return array Widget categories.
+	 * @return array Widget keywords.
 	 */
-	public function get_categories() {
-		return [ 'general-elements' ];
+	public function get_keywords() {
+		return [ 'sidebar', 'widget' ];
 	}
 
 	/**
@@ -61,6 +75,7 @@ class Widget_Sidebar extends Widget_Base {
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _register_controls() {
@@ -103,10 +118,11 @@ class Widget_Sidebar extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function render() {
-		$sidebar = $this->get_settings( 'sidebar' );
+		$sidebar = $this->get_settings_for_display( 'sidebar' );
 
 		if ( empty( $sidebar ) ) {
 			return;
@@ -120,6 +136,7 @@ class Widget_Sidebar extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _content_template() {}
@@ -129,6 +146,7 @@ class Widget_Sidebar extends Widget_Base {
 	 *
 	 * Override the default render behavior, don't render sidebar content.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 */
 	public function render_plain_content() {}

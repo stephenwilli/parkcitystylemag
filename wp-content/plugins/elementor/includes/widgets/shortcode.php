@@ -6,13 +6,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Shortcode Widget
+ * Elementor shortcode widget.
+ *
+ * Elementor widget that insert any shortcodes into the page.
+ *
+ * @since 1.0.0
  */
 class Widget_Shortcode extends Widget_Base {
 
 	/**
+	 * Get widget name.
+	 *
 	 * Retrieve shortcode widget name.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget name.
@@ -22,8 +29,11 @@ class Widget_Shortcode extends Widget_Base {
 	}
 
 	/**
+	 * Get widget title.
+	 *
 	 * Retrieve shortcode widget title.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget title.
@@ -33,8 +43,11 @@ class Widget_Shortcode extends Widget_Base {
 	}
 
 	/**
+	 * Get widget icon.
+	 *
 	 * Retrieve shortcode widget icon.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget icon.
@@ -44,16 +57,17 @@ class Widget_Shortcode extends Widget_Base {
 	}
 
 	/**
-	 * Retrieve the list of categories the shortcode widget belongs to.
+	 * Get widget keywords.
 	 *
-	 * Used to determine where to display the widget in the editor.
+	 * Retrieve the list of keywords the widget belongs to.
 	 *
+	 * @since 2.1.0
 	 * @access public
 	 *
-	 * @return array Widget categories.
+	 * @return array Widget keywords.
 	 */
-	public function get_categories() {
-		return [ 'general-elements' ];
+	public function get_keywords() {
+		return [ 'shortcode', 'code' ];
 	}
 
 	/**
@@ -61,6 +75,7 @@ class Widget_Shortcode extends Widget_Base {
 	 *
 	 * Used to determine whether the reload preview is required.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return bool Whether the reload preview is required.
@@ -74,6 +89,7 @@ class Widget_Shortcode extends Widget_Base {
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _register_controls() {
@@ -87,8 +103,11 @@ class Widget_Shortcode extends Widget_Base {
 		$this->add_control(
 			'shortcode',
 			[
-				'label' => __( 'Insert your shortcode here', 'elementor' ),
+				'label' => __( 'Enter your shortcode', 'elementor' ),
 				'type' => Controls_Manager::TEXTAREA,
+				'dynamic' => [
+					'active' => true,
+				],
 				'placeholder' => '[gallery id="123" size="medium"]',
 				'default' => '',
 			]
@@ -102,10 +121,11 @@ class Widget_Shortcode extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function render() {
-		$shortcode = $this->get_settings( 'shortcode' );
+		$shortcode = $this->get_settings_for_display( 'shortcode' );
 
 		$shortcode = do_shortcode( shortcode_unautop( $shortcode ) );
 		?>
@@ -116,8 +136,9 @@ class Widget_Shortcode extends Widget_Base {
 	/**
 	 * Render shortcode widget as plain content.
 	 *
-	 * Override the default behavior by printing the shortcode insted of rendering it.
+	 * Override the default behavior by printing the shortcode instead of rendering it.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 */
 	public function render_plain_content() {
@@ -130,6 +151,7 @@ class Widget_Shortcode extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _content_template() {}

@@ -1,12 +1,18 @@
 <?php
 namespace Elementor;
 
+use Elementor\Modules\DynamicTags\Module as TagsModule;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
 /**
- * Audio Widget
+ * Elementor audio widget.
+ *
+ * Elementor widget that displays an audio player.
+ *
+ * @since 1.0.0
  */
 class Widget_Audio extends Widget_Base {
 
@@ -20,8 +26,11 @@ class Widget_Audio extends Widget_Base {
 	protected $_current_instance = [];
 
 	/**
+	 * Get widget name.
+	 *
 	 * Retrieve audio widget name.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget name.
@@ -31,8 +40,11 @@ class Widget_Audio extends Widget_Base {
 	}
 
 	/**
+	 * Get widget title.
+	 *
 	 * Retrieve audio widget title.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget title.
@@ -42,8 +54,11 @@ class Widget_Audio extends Widget_Base {
 	}
 
 	/**
+	 * Get widget icon.
+	 *
 	 * Retrieve audio widget icon.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget icon.
@@ -53,16 +68,17 @@ class Widget_Audio extends Widget_Base {
 	}
 
 	/**
-	 * Retrieve the list of categories the audio widget belongs to.
+	 * Get widget keywords.
 	 *
-	 * Used to determine where to display the widget in the editor.
+	 * Retrieve the list of keywords the widget belongs to.
 	 *
+	 * @since 2.1.0
 	 * @access public
 	 *
-	 * @return array Widget categories.
+	 * @return array Widget keywords.
 	 */
-	public function get_categories() {
-		return [ 'general-elements' ];
+	public function get_keywords() {
+		return [ 'audio', 'player', 'soundcloud', 'embed' ];
 	}
 
 	/**
@@ -70,6 +86,7 @@ class Widget_Audio extends Widget_Base {
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _register_controls() {
@@ -85,6 +102,13 @@ class Widget_Audio extends Widget_Base {
 			[
 				'label' => __( 'Link', 'elementor' ),
 				'type' => Controls_Manager::URL,
+				'dynamic' => [
+					'active' => true,
+					'categories' => [
+						TagsModule::POST_META_CATEGORY,
+						TagsModule::URL_CATEGORY,
+					],
+				],
 				'default' => [
 					'url' => 'https://soundcloud.com/shchxango/john-coltrane-1963-my-favorite',
 				],
@@ -152,6 +176,20 @@ class Widget_Audio extends Widget_Base {
 				'label_off' => __( 'Hide', 'elementor' ),
 				'label_on' => __( 'Show', 'elementor' ),
 				'default' => 'yes',
+			]
+		);
+
+		$this->add_control(
+			'sc_show_artwork',
+			[
+				'label' => __( 'Artwork', 'elementor' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => __( 'Hide', 'elementor' ),
+				'label_on' => __( 'Show', 'elementor' ),
+				'default' => 'yes',
+				'condition' => [
+					'visual' => 'no',
+				],
 			]
 		);
 
@@ -225,10 +263,11 @@ class Widget_Audio extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function render() {
-		$settings = $this->get_settings();
+		$settings = $this->get_settings_for_display();
 
 		if ( empty( $settings['link'] ) ) {
 			return;
@@ -244,7 +283,7 @@ class Widget_Audio extends Widget_Base {
 			<div class="elementor-soundcloud-wrapper">
 				<?php echo $video_html; ?>
 			</div>
-		<?php
+			<?php
 		endif;
 	}
 
@@ -253,9 +292,12 @@ class Widget_Audio extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @param string $html The HTML returned by the oEmbed provider.
+	 *
+	 * @return string Filtered audio widget oEmbed HTML.
 	 */
 	public function filter_oembed_result( $html ) {
 		$param_keys = [
@@ -267,6 +309,7 @@ class Widget_Audio extends Widget_Base {
 			'show_comments',
 			'show_playcount',
 			'show_user',
+			'show_artwork',
 		];
 
 		$params = [];
@@ -297,6 +340,7 @@ class Widget_Audio extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _content_template() {}

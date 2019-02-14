@@ -1,13 +1,16 @@
 <?php
 namespace ElementorPro\License;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 class API {
 
 	const PRODUCT_NAME = 'Elementor Pro';
 
-	const STORE_URL = 'http://my.elementor.com/api/v1/licenses/';
+	const STORE_URL = 'https://my.elementor.com/api/v1/licenses/';
+	const RENEW_URL = 'https://go.elementor.com/renew/';
 
 	// License Statuses
 	const STATUS_VALID = 'valid';
@@ -22,7 +25,7 @@ class API {
 	 *
 	 * @return \stdClass|\WP_Error
 	 */
-	private static function _remote_post( $body_args = [] ) {
+	private static function remote_post( $body_args = [] ) {
 		$body_args = wp_parse_args(
 			$body_args,
 			[
@@ -34,7 +37,6 @@ class API {
 		);
 
 		$response = wp_remote_post( self::STORE_URL, [
-			'sslverify' => false,
 			'timeout' => 40,
 			'body' => $body_args,
 		] );
@@ -62,7 +64,7 @@ class API {
 			'license' => $license_key,
 		];
 
-		$license_data = self::_remote_post( $body_args );
+		$license_data = self::remote_post( $body_args );
 
 		return $license_data;
 	}
@@ -73,7 +75,7 @@ class API {
 			'license' => Admin::get_license_key(),
 		];
 
-		$license_data = self::_remote_post( $body_args );
+		$license_data = self::remote_post( $body_args );
 
 		return $license_data;
 	}
@@ -95,7 +97,7 @@ class API {
 				'license' => Admin::get_license_key(),
 			];
 
-			$license_data = self::_remote_post( $body_args );
+			$license_data = self::remote_post( $body_args );
 
 			if ( is_wp_error( $license_data ) ) {
 				$license_data = [
@@ -137,13 +139,13 @@ class API {
 			'beta' => 'yes' === get_option( 'elementor_beta', 'no' ),
 		];
 
-		$license_data = self::_remote_post( $body_args );
+		$license_data = self::remote_post( $body_args );
 
 		return $license_data;
 	}
 
 	public static function get_previous_package_url() {
-		$url = 'http://my.elementor.com/api/v1/pro-downloads/';
+		$url = 'https://my.elementor.com/api/v1/pro-downloads/';
 
 		$body_args = [
 			'item_name' => self::PRODUCT_NAME,
@@ -153,7 +155,6 @@ class API {
 		];
 
 		$response = wp_remote_post( $url, [
-			'sslverify' => false,
 			'timeout' => 40,
 			'body' => $body_args,
 		] );
@@ -179,5 +180,27 @@ class API {
 		}
 
 		return $data['package_url'];
+	}
+
+	public static function get_errors() {
+		return [
+			'no_activations_left' => sprintf( __( '<strong>You have no more activations left.</strong> <a href="%s" target="_blank">Please upgrade to a more advanced license</a> (you\'ll only need to cover the difference).', 'elementor-pro' ), 'https://go.elementor.com/upgrade/' ),
+			'expired' => sprintf( __( '<strong>Your License Has Expired.</strong> <a href="%s" target="_blank">Renew your license today</a> to keep getting feature updates, premium support and unlimited access to the template library.', 'elementor-pro' ), 'https://go.elementor.com/renew/' ),
+			'missing' => __( 'Your license is missing. Please check your key again.', 'elementor-pro' ),
+			'revoked' => __( '<strong>Your license key has been cancelled</strong> (most likely due to a refund request). Please consider acquiring a new license.', 'elementor-pro' ),
+			'key_mismatch' => __( 'Your license is invalid for this domain. Please check your key again.', 'elementor-pro' ),
+		];
+	}
+
+	public static function get_error_message( $error ) {
+		$errors = self::get_errors();
+
+		if ( isset( $errors[ $error ] ) ) {
+			$error_msg = $errors[ $error ];
+		} else {
+			$error_msg = __( 'An error occurred. Please check your internet connection and try again. If the problem persists, contact our support.', 'elementor-pro' ) . ' (' . $error . ')';
+		}
+
+		return $error_msg;
 	}
 }

@@ -1,5 +1,7 @@
 <?php
 /**
+ * WPSEO plugin file.
+ *
  * @package WPSEO\Admin\Links
  */
 
@@ -11,13 +13,19 @@ class WPSEO_Link {
 	const TYPE_EXTERNAL = 'external';
 	const TYPE_INTERNAL = 'internal';
 
-	/** @var string */
+	/**
+	 * @var string
+	 */
 	protected $url;
 
-	/** @var int */
+	/**
+	 * @var int
+	 */
 	protected $target_post_id;
 
-	/** @var string */
+	/**
+	 * @var string
+	 */
 	protected $type;
 
 	/**
@@ -28,9 +36,9 @@ class WPSEO_Link {
 	 * @param string $type           The url type: internal or outbound.
 	 */
 	public function __construct( $url, $target_post_id, $type ) {
-		$this->url = $url;
+		$this->url            = $url;
 		$this->target_post_id = $target_post_id;
-		$this->type = $type;
+		$this->type           = $type;
 	}
 
 	/**

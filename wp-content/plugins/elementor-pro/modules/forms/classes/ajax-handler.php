@@ -5,7 +5,9 @@ use Elementor\Utils;
 use ElementorPro\Modules\Forms\Module;
 use ElementorPro\Plugin;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 class Ajax_Handler {
 
@@ -13,6 +15,7 @@ class Ajax_Handler {
 	public $messages = [
 		'success' => [],
 		'error' => [],
+		'admin_error' => [],
 	];
 	public $data = [];
 	public $errors = [];
@@ -32,12 +35,12 @@ class Ajax_Handler {
 
 	public static function get_default_messages() {
 		return [
-			self::SUCCESS => __( 'The form was sent successfully!', 'elementor-pro' ),
-			self::ERROR => __( 'There\'s something wrong... Please fill in the required fields.', 'elementor-pro' ),
-			self::FIELD_REQUIRED => __( 'Required', 'elementor-pro' ),
-			self::INVALID_FORM => __( 'There\'s something wrong... The form is invalid.', 'elementor-pro' ),
+			self::SUCCESS => __( 'The form was sent successfully.', 'elementor-pro' ),
+			self::ERROR => __( 'An error occured.', 'elementor-pro' ),
+			self::FIELD_REQUIRED => __( 'This field is required.', 'elementor-pro' ),
+			self::INVALID_FORM => __( 'There\'s something wrong. The form is invalid.', 'elementor-pro' ),
 			self::SERVER_ERROR => __( 'Server error. Form not sent.', 'elementor-pro' ),
-			self::SUBSCRIBER_ALREADY_EXISTS => __( 'Subscriber already exist.', 'elementor-pro' ),
+			self::SUBSCRIBER_ALREADY_EXISTS => __( 'Subscriber already exists.', 'elementor-pro' ),
 		];
 	}
 
@@ -98,6 +101,12 @@ class Ajax_Handler {
 				->send();
 		}
 
+		$record->process_fields( $this );
+		//check for process errors
+		if ( ! empty( $this->errors ) ) {
+			$this->send();
+		}
+
 		$module = Module::instance();
 
 		$actions = $module->get_form_actions();
@@ -118,6 +127,16 @@ class Ajax_Handler {
 			$cf7db->run( $record, $this );
 		}
 
+		/**
+		 * New Elementor form record.
+		 *
+		 * Fires before a new form record is send by ajax.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param Form_Record  $record An instance of the form record.
+		 * @param Ajax_Handler $this   An instance of the ajax handler.
+		 */
 		do_action( 'elementor_pro/forms/new_record', $record, $this );
 
 		$this->send();
@@ -154,6 +173,13 @@ class Ajax_Handler {
 		return $this;
 	}
 
+	public function add_admin_error_message( $message ) {
+		$this->messages['admin_error'][] = $message;
+		$this->set_success( false );
+
+		return $this;
+	}
+
 	public function set_success( $bool ) {
 		$this->is_success = $bool;
 
@@ -166,17 +192,23 @@ class Ajax_Handler {
 				'message' => $this->get_default_message( self::SUCCESS, $this->current_form['settings'] ),
 				'data' => $this->data,
 			] );
-		} else {
-			if ( empty( $this->messages['error'] ) && ! empty( $this->errors ) ) {
-				$this->add_error_message( $this->get_default_message( self::INVALID_FORM, $this->current_form['settings'] ) );
-			}
-
-			wp_send_json_error( [
-				'message' => implode( '<br>', $this->messages['error'] ),
-				'errors' => $this->errors,
-				'data' => $this->data,
-			] );
 		}
+
+		if ( empty( $this->messages['error'] ) && ! empty( $this->errors ) ) {
+			$this->add_error_message( $this->get_default_message( self::INVALID_FORM, $this->current_form['settings'] ) );
+		}
+
+		$error_msg = implode( '<br>', $this->messages['error'] );
+		if ( current_user_can( 'edit_post', $_POST['post_id'] ) && ! empty( $this->messages['admin_error'] ) ) {
+			$this->add_admin_error_message( __( 'This Message is not visible for site visitors.', 'elementor-pro' ) );
+			$error_msg .= '<div class="elementor-forms-admin-errors">' . implode( '<br>', $this->messages['admin_error'] ) . '</div>';
+		}
+
+		wp_send_json_error( [
+			'message' => $error_msg,
+			'errors' => $this->errors,
+			'data' => $this->data,
+		] );
 	}
 
 	public function __construct() {

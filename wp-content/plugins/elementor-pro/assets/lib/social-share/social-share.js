@@ -1,5 +1,4 @@
-(function( $ ) {
-
+( function( $ ) {
 	var ShareLink = function( element, userSettings ) {
 		var $element,
 			settings = {};
@@ -8,6 +7,10 @@
 			var link = ShareLink.networkTemplates[ networkName ].replace( /{([^}]+)}/g, function( fullMatch, pureMatch ) {
 				return settings[ pureMatch ];
 			} );
+
+			if ( 'email' === networkName && link.indexOf( '?subject=&body') ) {
+				link = link.replace( 'subject=&', '' );
+			}
 
 			return encodeURI( link );
 		};
@@ -28,8 +31,8 @@
 			var shareWindowParams = '';
 
 			if ( settings.width && settings.height ) {
-				var shareWindowLeft = screen.width / 2 - settings.width / 2,
-					shareWindowTop = screen.height / 2 - settings.height / 2;
+				var shareWindowLeft = ( screen.width / 2 ) - ( settings.width / 2 ),
+					shareWindowTop = ( screen.height / 2 ) - ( settings.height / 2 );
 
 				shareWindowParams = 'toolbar=0,status=0,width=' + settings.width + ',height=' + settings.height + ',top=' + shareWindowTop + ',left=' + shareWindowLeft;
 			}
@@ -84,7 +87,7 @@
 		facebook: 'https://www.facebook.com/sharer.php?u={url}',
 		vk: 'https://vkontakte.ru/share.php?url={url}&title={title}&description={text}&image={image}',
 		linkedin: 'https://www.linkedin.com/shareArticle?mini=true&url={url}&title={title}&summary={text}&source={url}',
-		odnoklassniki: 'http://odnoklassniki.ru/dk?st.cmd=addShare&st.s=1&st._surl={url}',
+		odnoklassniki: 'https://connect.ok.ru/offer?url={url}&title={title}&imageUrl={image}',
 		tumblr: 'https://tumblr.com/share/link?url={url}',
 		delicious: 'https://del.icio.us/save?url={url}&title={title}',
 		google: 'https://plus.google.com/share?url={url}',
@@ -97,7 +100,7 @@
 		print: 'javascript:print()',
 		email: 'mailto:?subject={title}&body={text}\n{url}',
 		telegram: 'https://telegram.me/share/url?url={url}&text={text}',
-		skype: 'https://web.skype.com/share?url={url}'
+		skype: 'https://web.skype.com/share?url={url}',
 	};
 
 	ShareLink.defaultSettings = {
@@ -107,7 +110,7 @@
 		url: location.href,
 		classPrefix: 's_',
 		width: 640,
-		height: 480
+		height: 480,
 	};
 
 	var ShareCounter = function( element, userSettings ) {
@@ -199,8 +202,8 @@
 		url: location.href,
 		classPrefix: 'c_',
 		formatCount: false,
-		shareCountsAPI: 'https://count.donreach.com/?url={url}&providers={providers}',
-		providers: [ 'all' ]
+		shareCountsAPI: 'https://{domain}/shares?url={url}&providers={providers}',
+		providers: [ 'all' ],
 	};
 
 	ShareCounter.providers = {
@@ -208,20 +211,13 @@
 			url: function( url, providers ) {
 				return ShareCounter.defaultSettings.shareCountsAPI
 					.replace( '{url}', url )
+					.replace( '{domain}', ElementorProFrontendConfig.donreach.api_url )
 					.replace( '{providers}', providers.join( ',' ) );
 			},
 			getParsedData: function( data ) {
 				return data.shares;
-			}
-		},
-		facebook: {
-			url: function( url ) {
-				return 'https://graph.facebook.com/?id=' + url;
 			},
-			getParsedData: function( data ) {
-				return data.share.share_count;
-			}
-		}
+		},
 	};
 
 	ShareCounter.requests = {};
@@ -231,7 +227,7 @@
 			ShareCounter.requests[ url ] = {
 				providers: [],
 				data: {},
-				xhRequest: {}
+				xhRequest: {},
 			};
 		}
 
@@ -259,12 +255,16 @@
 				}
 			} );
 
-			currentRequest.xhRequest.general = $.get(
-				ShareCounter.providers.general.url( url, generalProviders ),
-				function( data ) {
+			var requestParams = {
+				url: ShareCounter.providers.general.url( url, generalProviders ),
+				headers: {
+					Authorization: ElementorProFrontendConfig.donreach.key,
+				},
+				success: function( data ) {
 					$.extend( currentRequest.data, ShareCounter.providers.general.getParsedData( data ) );
-				}
-			);
+				},
+			};
+			currentRequest.xhRequest.general = $.get( requestParams );
 		}
 
 		$.when.apply( null, Object.values( currentRequest.xhRequest ) ).then( function() {
@@ -281,4 +281,4 @@
 			} );
 		};
 	} );
-})( jQuery );
+} )( jQuery );

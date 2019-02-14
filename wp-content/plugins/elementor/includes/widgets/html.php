@@ -6,13 +6,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * HTML Widget
+ * Elementor HTML widget.
+ *
+ * Elementor widget that insert a custom HTML code into the page.
+ *
+ * @since 1.0.0
  */
 class Widget_Html extends Widget_Base {
 
 	/**
+	 * Get widget name.
+	 *
 	 * Retrieve HTML widget name.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget name.
@@ -22,8 +29,11 @@ class Widget_Html extends Widget_Base {
 	}
 
 	/**
+	 * Get widget title.
+	 *
 	 * Retrieve HTML widget title.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget title.
@@ -33,8 +43,11 @@ class Widget_Html extends Widget_Base {
 	}
 
 	/**
+	 * Get widget icon.
+	 *
 	 * Retrieve HTML widget icon.
 	 *
+	 * @since 1.0.0
 	 * @access public
 	 *
 	 * @return string Widget icon.
@@ -44,16 +57,17 @@ class Widget_Html extends Widget_Base {
 	}
 
 	/**
-	 * Retrieve the list of categories the HTML widget belongs to.
+	 * Get widget keywords.
 	 *
-	 * Used to determine where to display the widget in the editor.
+	 * Retrieve the list of keywords the widget belongs to.
 	 *
+	 * @since 2.1.0
 	 * @access public
 	 *
-	 * @return array Widget categories.
+	 * @return array Widget keywords.
 	 */
-	public function get_categories() {
-		return [ 'general-elements' ];
+	public function get_keywords() {
+		return [ 'html', 'code' ];
 	}
 
 	/**
@@ -61,6 +75,7 @@ class Widget_Html extends Widget_Base {
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _register_controls() {
@@ -77,7 +92,7 @@ class Widget_Html extends Widget_Base {
 				'label' => '',
 				'type' => Controls_Manager::CODE,
 				'default' => '',
-				'placeholder' => __( 'Enter your embed code here', 'elementor' ),
+				'placeholder' => __( 'Enter your code', 'elementor' ),
 				'show_label' => false,
 			]
 		);
@@ -90,10 +105,11 @@ class Widget_Html extends Widget_Base {
 	 *
 	 * Written in PHP and used to generate the final HTML.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function render() {
-		 echo $this->get_settings( 'html' );
+		 echo $this->get_settings_for_display( 'html' );
 	}
 
 	/**
@@ -101,6 +117,7 @@ class Widget_Html extends Widget_Base {
 	 *
 	 * Written as a Backbone JavaScript template and used to generate the live preview.
 	 *
+	 * @since 1.0.0
 	 * @access protected
 	 */
 	protected function _content_template() {

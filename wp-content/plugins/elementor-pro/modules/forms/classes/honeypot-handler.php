@@ -4,7 +4,9 @@ namespace ElementorPro\Modules\Forms\Classes;
 use Elementor\Widget_Base;
 use ElementorPro\Plugin;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 /**
  * Honeypot field
@@ -27,8 +29,8 @@ class Honeypot_Handler {
 	}
 
 	/**
-	 * @param string $item
-	 * @param integer $item_index
+	 * @param string      $item
+	 * @param integer     $item_index
 	 * @param Widget_Base $widget
 	 */
 	public function render_field( $item, $item_index, $widget ) {
@@ -39,7 +41,7 @@ class Honeypot_Handler {
 	}
 
 	/**
-	 * @param Form_Record $record
+	 * @param Form_Record  $record
 	 * @param Ajax_Handler $ajax_handler
 	 */
 	public function validation( $record, $ajax_handler ) {
@@ -64,18 +66,12 @@ class Honeypot_Handler {
 	public function update_controls( Widget_Base $widget ) {
 		$elementor = Plugin::elementor();
 
-		// Check if elementor free is higher than 1.6.0
-		if ( method_exists( $widget, 'get_unique_name' ) ) {
-			$widget_name = $widget->get_unique_name();
-		} else {
-			$widget_name = $widget->get_name();
-		}
-
-		$control_data = $elementor->controls_manager->get_control_from_stack( $widget_name, 'form_fields' );
+		$control_data = $elementor->controls_manager->get_control_from_stack( $widget->get_unique_name(), 'form_fields' );
 
 		if ( is_wp_error( $control_data ) ) {
 			return;
 		}
+
 		foreach ( $control_data['fields'] as $index => $field ) {
 			if ( 'required' === $field['name'] || 'width' === $field['name'] ) {
 				$control_data['fields'][ $index ]['conditions']['terms'][] = [
@@ -88,7 +84,7 @@ class Honeypot_Handler {
 			}
 		}
 
-		$elementor->controls_manager->update_control_in_stack( $widget, 'form_fields', $control_data );
+		$widget->update_control( 'form_fields', $control_data );
 	}
 
 	public function __construct() {

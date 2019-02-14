@@ -2,14 +2,18 @@
 namespace ElementorPro\Modules\NavMenu\Widgets;
 
 use Elementor\Controls_Manager;
+use Elementor\Core\Responsive\Responsive;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Typography;
 use Elementor\Scheme_Color;
 use Elementor\Scheme_Typography;
 use Elementor\Widget_Base;
+use ElementorPro\Plugin;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 class Nav_Menu extends Widget_Base {
 
@@ -28,11 +32,21 @@ class Nav_Menu extends Widget_Base {
 	}
 
 	public function get_categories() {
-		return [ 'pro-elements' ];
+		return [ 'pro-elements', 'theme-elements' ];
+	}
+
+	public function get_keywords() {
+		return [ 'menu', 'nav', 'button' ];
 	}
 
 	public function get_script_depends() {
 		return [ 'smartmenus' ];
+	}
+
+	public function on_export( $element ) {
+		unset( $element['settings']['menu'] );
+
+		return $element;
 	}
 
 	protected function get_nav_menu_index() {
@@ -66,10 +80,11 @@ class Nav_Menu extends Widget_Base {
 			$this->add_control(
 				'menu',
 				[
-					'label'   => __( 'Menu', 'elementor-pro' ),
-					'type'    => Controls_Manager::SELECT,
+					'label' => __( 'Menu', 'elementor-pro' ),
+					'type' => Controls_Manager::SELECT,
 					'options' => $menus,
 					'default' => array_keys( $menus )[0],
+					'save_default' => true,
 					'separator' => 'after',
 					'description' => sprintf( __( 'Go to the <a href="%s" target="_blank">Menus screen</a> to manage your menus.', 'elementor-pro' ), admin_url( 'nav-menus.php' ) ),
 				]
@@ -165,6 +180,7 @@ class Nav_Menu extends Widget_Base {
 					'grow' => 'Grow',
 					'drop-in' => 'Drop In',
 					'drop-out' => 'Drop Out',
+					'none' => 'None',
 				],
 				'condition' => [
 					'layout!' => 'dropdown',
@@ -185,6 +201,7 @@ class Nav_Menu extends Widget_Base {
 					'shrink' => 'Shrink',
 					'draw' => 'Draw',
 					'corners' => 'Corners',
+					'none' => 'None',
 				],
 				'condition' => [
 					'layout!' => 'dropdown',
@@ -211,6 +228,7 @@ class Nav_Menu extends Widget_Base {
 					'shutter-out-vertical' => 'Shutter Out Vertical',
 					'shutter-in-horizontal' => 'Shutter In Horizontal',
 					'shutter-out-horizontal' => 'Shutter Out Horizontal',
+					'none' => 'None',
 				],
 				'condition' => [
 					'layout!' => 'dropdown',
@@ -232,6 +250,7 @@ class Nav_Menu extends Widget_Base {
 					'float' => 'Float',
 					'skew' => 'Skew',
 					'rotate' => 'Rotate',
+					'none' => 'None',
 				],
 				'condition' => [
 					'layout!' => 'dropdown',
@@ -269,6 +288,8 @@ class Nav_Menu extends Widget_Base {
 			]
 		);
 
+		$breakpoints = Responsive::get_breakpoints();
+
 		$this->add_control(
 			'dropdown',
 			[
@@ -276,8 +297,10 @@ class Nav_Menu extends Widget_Base {
 				'type' => Controls_Manager::SELECT,
 				'default' => 'tablet',
 				'options' => [
-					'mobile' => __( 'Mobile (767px >)', 'elementor-pro' ),
-					'tablet' => __( 'Tablet (1023px >)', 'elementor-pro' ),
+					/* translators: %d: Breakpoint number. */
+					'mobile' => sprintf( __( 'Mobile (< %dpx)', 'elementor-pro' ), $breakpoints['md'] ),
+					/* translators: %d: Breakpoint number. */
+					'tablet' => sprintf( __( 'Tablet (< %dpx)', 'elementor-pro' ), $breakpoints['lg'] ),
 				],
 				'prefix_class' => 'elementor-nav-menu--dropdown-',
 				'condition' => [
@@ -377,11 +400,12 @@ class Nav_Menu extends Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'heading_menu_item',
+		$this->add_group_control(
+			Group_Control_Typography::get_type(),
 			[
-				'type' => Controls_Manager::HEADING,
-				'label' => __( 'Menu Item', 'elementor-pro' ),
+				'name' => 'menu_typography',
+				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+				'selector' => '{{WRAPPER}} .elementor-nav-menu--main',
 			]
 		);
 
@@ -523,14 +547,12 @@ class Nav_Menu extends Widget_Base {
 
 		$this->end_controls_tabs();
 
-		$this->add_group_control(
-			Group_Control_Typography::get_type(),
+		/* This control is required to handle with complicated conditions */
+		$this->add_control(
+			'hr',
 			[
-				'name' => 'menu_typography',
-				'label' => __( 'Typography', 'elementor-pro' ),
-				'scheme' => Scheme_Typography::TYPOGRAPHY_1,
-				'separator' => 'before',
-				'selector' => '{{WRAPPER}} .elementor-nav-menu--main',
+				'type' => Controls_Manager::DIVIDER,
+				'style' => 'thick',
 			]
 		);
 
@@ -559,7 +581,6 @@ class Nav_Menu extends Widget_Base {
 				'condition' => [
 					'pointer' => [ 'underline', 'overline', 'double-line', 'framed' ],
 				],
-				'separator' => 'before',
 			]
 		);
 
@@ -705,7 +726,10 @@ class Nav_Menu extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .elementor-nav-menu--dropdown a:hover, {{WRAPPER}} .elementor-menu-toggle:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementor-nav-menu--dropdown a:hover,
+					{{WRAPPER}} .elementor-nav-menu--dropdown a.elementor-item-active,
+					{{WRAPPER}} .elementor-nav-menu--dropdown a.highlighted,
+					{{WRAPPER}} .elementor-menu-toggle:hover' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -718,7 +742,42 @@ class Nav_Menu extends Widget_Base {
 				'default' => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown a:hover,
+					{{WRAPPER}} .elementor-nav-menu--dropdown a.elementor-item-active,
 					{{WRAPPER}} .elementor-nav-menu--dropdown a.highlighted' => 'background-color: {{VALUE}}',
+				],
+				'separator' => 'none',
+			]
+		);
+
+		$this->end_controls_tab();
+
+		$this->start_controls_tab(
+			'tab_dropdown_item_active',
+			[
+				'label' => __( 'Active', 'elementor-pro' ),
+			]
+		);
+
+		$this->add_control(
+			'color_dropdown_item_active',
+			[
+				'label' => __( 'Text Color', 'elementor-pro' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .elementor-nav-menu--dropdown a.elementor-item-active' => 'color: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'background_color_dropdown_item_active',
+			[
+				'label' => __( 'Background Color', 'elementor-pro' ),
+				'type' => Controls_Manager::COLOR,
+				'default' => '',
+				'selectors' => [
+					'{{WRAPPER}} .elementor-nav-menu--dropdown a.elementor-item-active' => 'background-color: {{VALUE}}',
 				],
 				'separator' => 'none',
 			]
@@ -732,7 +791,6 @@ class Nav_Menu extends Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name' => 'dropdown_typography',
-				'label' => __( 'Typography', 'elementor-pro' ),
 				'scheme' => Scheme_Typography::TYPOGRAPHY_4,
 				'exclude' => [ 'line_height' ],
 				'selector' => '{{WRAPPER}} .elementor-nav-menu--dropdown',
@@ -744,7 +802,6 @@ class Nav_Menu extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name' => 'dropdown_border',
-				'label' => __( 'Border', 'elementor-pro' ),
 				'selector' => '{{WRAPPER}} .elementor-nav-menu--dropdown',
 				'separator' => 'before',
 			]
@@ -758,8 +815,8 @@ class Nav_Menu extends Widget_Base {
 				'size_units' => [ 'px', '%' ],
 				'selectors' => [
 					'{{WRAPPER}} .elementor-nav-menu--dropdown' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-					'{{WRAPPER}} .elementor-nav-menu--dropdown li:first-child' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}};',
-					'{{WRAPPER}} .elementor-nav-menu--dropdown li:last-child' => 'border-radius: {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-nav-menu--dropdown li:first-child a' => 'border-top-left-radius: {{TOP}}{{UNIT}}; border-top-right-radius: {{RIGHT}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-nav-menu--dropdown li:last-child a' => 'border-bottom-right-radius: {{BOTTOM}}{{UNIT}}; border-bottom-left-radius: {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -817,7 +874,6 @@ class Nav_Menu extends Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name' => 'dropdown_divider',
-				'label' => __( 'Divider', 'elementor-pro' ),
 				'selector' => '{{WRAPPER}} .elementor-nav-menu--dropdown li:not(:last-child)',
 				'exclude' => [ 'width' ],
 			]
@@ -996,9 +1052,11 @@ class Nav_Menu extends Widget_Base {
 		$settings = $this->get_active_settings();
 
 		$args = [
+			'echo' => false,
 			'menu' => $settings['menu'],
 			'menu_class' => 'elementor-nav-menu',
 			'menu_id' => 'menu-' . $this->get_nav_menu_index() . '-' . $this->get_id(),
+			'fallback_cb' => '__return_empty_string',
 			'container' => '',
 		];
 
@@ -1011,10 +1069,31 @@ class Nav_Menu extends Widget_Base {
 		add_filter( 'nav_menu_submenu_css_class', [ $this, 'handle_sub_menu_classes' ] );
 		add_filter( 'nav_menu_item_id', '__return_empty_string' );
 
+		// General Menu.
+		$menu_html = wp_nav_menu( $args );
+
+		// Dropdown Menu.
+		$args['menu_id'] = 'menu-' . $this->get_nav_menu_index() . '-' . $this->get_id();
+		$dropdown_menu_html = wp_nav_menu( $args );
+
+		// Remove all our custom filters.
+		remove_filter( 'nav_menu_link_attributes', [ $this, 'handle_link_classes' ] );
+		remove_filter( 'nav_menu_submenu_css_class', [ $this, 'handle_sub_menu_classes' ] );
+		remove_filter( 'nav_menu_item_id', '__return_empty_string' );
+
+		if ( empty( $menu_html ) ) {
+			return;
+		}
+
 		$this->add_render_attribute( 'menu-toggle', 'class', [
 			'elementor-menu-toggle',
-			'elementor-clickable',
 		] );
+
+		if ( Plugin::elementor()->editor->is_edit_mode() ) {
+			$this->add_render_attribute( 'menu-toggle', [
+				'class' => 'elementor-clickable',
+			] );
+		}
 
 		if ( 'dropdown' !== $settings['layout'] ) :
 			$this->add_render_attribute( 'main-menu', 'class', [
@@ -1034,28 +1113,28 @@ class Nav_Menu extends Widget_Base {
 					endif;
 				endforeach;
 			endif; ?>
-			<nav <?php echo $this->get_render_attribute_string( 'main-menu' ); ?>><?php wp_nav_menu( $args ); ?></nav>
+			<nav <?php echo $this->get_render_attribute_string( 'main-menu' ); ?>><?php echo $menu_html; ?></nav>
 			<?php
 		endif;
-
-		$args['menu_id'] = 'menu-' . $this->get_nav_menu_index() . '-' . $this->get_id();
 		?>
 		<div <?php echo $this->get_render_attribute_string( 'menu-toggle' ); ?>>
-			<i class="eicon-temp"></i>
+			<i class="eicon" aria-hidden="true"></i>
+			<span class="elementor-screen-only"><?php _e( 'Menu', 'elementor-pro' ); ?></span>
 		</div>
-		<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container"><?php echo wp_nav_menu( $args ); ?></nav>
+		<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container"><?php echo $dropdown_menu_html; ?></nav>
 		<?php
-		// Remove all our custom filters.
-		remove_filter( 'nav_menu_link_attributes', [ $this, 'handle_link_classes' ] );
-		remove_filter( 'nav_menu_submenu_css_class', [ $this, 'handle_sub_menu_classes' ] );
-		remove_filter( 'nav_menu_item_id', '__return_empty_string' );
 	}
 
 	public function handle_link_classes( $atts, $item, $args, $depth ) {
 		$classes = $depth ? 'elementor-sub-item' : 'elementor-item';
+		$is_anchor = false !== strpos( $atts['href'], '#' );
 
-		if ( in_array( 'current-menu-item', $item->classes ) ) {
-			$classes .= '  elementor-item-active';
+		if ( ! $is_anchor && in_array( 'current-menu-item', $item->classes ) ) {
+			$classes .= ' elementor-item-active';
+		}
+
+		if ( $is_anchor ) {
+			$classes .= ' elementor-item-anchor';
 		}
 
 		if ( empty( $atts['class'] ) ) {

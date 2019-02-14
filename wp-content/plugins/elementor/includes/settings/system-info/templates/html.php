@@ -8,11 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 foreach ( $reports as $report_name => $report ) : ?>
-	<div class="elementor-system-info-section">
+	<div class="elementor-system-info-section elementor-system-info-<?php echo esc_attr( $report_name ); ?>">
 		<table class="widefat">
 			<thead>
 			<tr>
-				<th style="width: 15%;"><?php echo $report['label']; ?></th>
+				<th><?php echo $report['label']; ?></th>
 				<th></th>
 				<th></th>
 			</tr>
@@ -21,14 +21,13 @@ foreach ( $reports as $report_name => $report ) : ?>
 			<?php
 			foreach ( $report['report'] as $field_name => $field ) :
 
-				if ( in_array( $report_name, [ 'plugins', 'network_plugins', 'mu_plugins' ] ) ) :
+				if ( in_array( $report_name, [ 'plugins', 'network_plugins', 'mu_plugins' ], true ) ) :
 					foreach ( $field['value'] as $plugin ) :
-					?>
+						?>
 						<tr>
-							<td>
-								<?php
-								if ( $plugin['PluginURI'] ) :
-									$plugin_name = "<a href='{$plugin['PluginURI']}'>{$plugin['Name']}</a>";
+							<td><?php
+							if ( $plugin['PluginURI'] ) :
+								$plugin_name = "<a href='{$plugin['PluginURI']}'>{$plugin['Name']}</a>";
 								else :
 									$plugin_name = $plugin['Name'];
 								endif;
@@ -38,45 +37,41 @@ foreach ( $reports as $report_name => $report ) : ?>
 								endif;
 
 								echo $plugin_name;
-								?>
-								</td>
-							<td>
-								<?php
-								if ( $plugin['Author'] ) :
-
-									if ( $plugin['AuthorURI'] ) :
-										$author = "<a href='{$plugin['AuthorURI']}'>{$plugin['Author']}</a>";
+								?></td>
+							<td><?php
+							if ( $plugin['Author'] ) :
+								if ( $plugin['AuthorURI'] ) :
+									$author = "<a href='{$plugin['AuthorURI']}'>{$plugin['Author']}</a>";
 									else :
 										$author = $plugin['Author'];
 									endif;
 
 									echo "By $author";
 								endif;
-								?>
-								</td>
+							?></td>
 							<td></td>
 						</tr>
-					<?php
+						<?php
 					endforeach;
 				else :
-				?>
-					<tr>
-						<td><?php echo $field['label']; ?>:</td>
-						<td><?php echo nl2br( $field['value'] ); ?></td>
-						<td>
-						<?php
-						if ( ! empty( $field['recommendation'] ) ) :
-								echo $field['recommendation'];
-							endif;
-							?>
-							</td>
+					$warning_class = ! empty( $field['warning'] ) ? ' class="elementor-warning"' : '';
+					$log_label = ! empty( $field['label'] ) ? $field['label'] . ':' : '';
+					?>
+					<tr<?php echo $warning_class; ?>>
+						<td><?php echo $log_label; ?></td>
+						<td><?php echo $field['value']; ?></td>
+						<td><?php
+						if ( ! empty( $field['recommendation'] ) ) {
+							echo $field['recommendation'];
+						}
+						?></td>
 					</tr>
-				<?php
+					<?php
 				endif;
 			endforeach;
 			?>
 			</tbody>
 		</table>
 	</div>
-<?php
+	<?php
 endforeach;

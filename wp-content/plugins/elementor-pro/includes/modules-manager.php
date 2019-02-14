@@ -3,7 +3,9 @@ namespace ElementorPro;
 
 use ElementorPro\Base\Module_Base;
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 final class Manager {
 	/**
@@ -14,6 +16,15 @@ final class Manager {
 	public function __construct() {
 		$modules = [
 			'query-control',
+			'custom-attributes',
+			'custom-css',
+			// role-manager Must be before Global Widget
+			'role-manager',
+			'global-widget',
+			'assets-manager',
+
+			// Modules with Widgets.
+			'theme-builder',
 			'posts',
 			'slides',
 			'forms',
@@ -21,22 +32,25 @@ final class Manager {
 			'animated-headline',
 			'pricing',
 			'flip-box',
+			'call-to-action',
 			'carousel',
 			'countdown',
-			'woocommerce',
 			'share-buttons',
-			'custom-css',
-			'global-widget',
+			'theme-elements',
 			'blockquote',
+			'woocommerce',
 			'social',
 			'library',
+			'dynamic-tags',
+			'sticky',
+			'wp-cli',
+			'link-actions',
+			'popup',
 		];
 
 		foreach ( $modules as $module_name ) {
 			$class_name = str_replace( '-', ' ', $module_name );
-
 			$class_name = str_replace( ' ', '', ucwords( $class_name ) );
-
 			$class_name = __NAMESPACE__ . '\\Modules\\' . $class_name . '\Module';
 
 			/** @var Module_Base $class_name */

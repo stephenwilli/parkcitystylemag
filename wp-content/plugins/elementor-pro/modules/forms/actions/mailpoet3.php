@@ -1,5 +1,4 @@
 <?php
-
 namespace ElementorPro\Modules\Forms\Actions;
 
 use Elementor\Controls_Manager;
@@ -8,11 +7,10 @@ use ElementorPro\Modules\Forms\Classes\Form_Record;
 use ElementorPro\Modules\Forms\Controls\Fields_Map;
 use ElementorPro\Modules\Forms\Classes\Action_Base;
 use MailPoet\API\API;
-use MailPoet\Models\Setting;
 use MailPoet\Models\Subscriber;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;  // Exit if accessed directly
+	exit; // Exit if accessed directly
 };
 
 class Mailpoet3 extends Action_Base {
@@ -54,40 +52,54 @@ class Mailpoet3 extends Action_Base {
 			]
 		);
 
-		$mailpoet3_confirmation = Setting::getValue( 'signup_confirmation' );
-
 		$widget->add_control(
 			'mailpoet3_auto_confirm',
 			[
 				'label' => __( 'Auto Confirm', 'elementor-pro' ),
 				'type' => Controls_Manager::SWITCHER,
-				'default' => empty( $mailpoet3_confirmation['enabled'] ) ? 'yes' : '',
+				'default' => 'yes',
 			]
 		);
+
+		$mailpoet_fields = [
+			[
+				'remote_id' => 'first_name',
+				'remote_label' => __( 'First Name', 'elementor-pro' ),
+				'remote_type' => 'text',
+			],
+			[
+				'remote_id' => 'last_name',
+				'remote_label' => __( 'Last Name', 'elementor-pro' ),
+				'remote_type' => 'text',
+			],
+			[
+				'remote_id' => 'email',
+				'remote_label' => __( 'Email', 'elementor-pro' ),
+				'remote_type' => 'email',
+				'remote_required' => true,
+			],
+		];
+		$fields = API::MP( 'v1' )->getSubscriberFields();
+
+		if ( ! empty( $fields ) && is_array( $fields ) ) {
+			foreach ( $fields as $index => $remote ) {
+				if ( in_array( $remote['id'], [ 'first_name', 'last_name', 'email' ] ) ) {
+					continue;
+				}
+				$mailpoet_fields[] = [
+					'remote_id' => $remote['id'],
+					'remote_label' => $remote['name'],
+					'remote_type' => 'text',
+				];
+			}
+		}
 
 		$widget->add_control(
 			'mailpoet3_fields_map',
 			[
 				'label' => __( 'Field Mapping', 'elementor-pro' ),
 				'type' => Fields_Map::CONTROL_TYPE,
-				'default' => [
-					[
-						'remote_id' => 'first_name',
-						'remote_label' => __( 'First Name', 'elementor-pro' ),
-						'remote_type' => 'text',
-					],
-					[
-						'remote_id' => 'last_name',
-						'remote_label' => __( 'Last Name', 'elementor-pro' ),
-						'remote_type' => 'text',
-					],
-					[
-						'remote_id' => 'email',
-						'remote_label' => __( 'Email', 'elementor-pro' ),
-						'remote_type' => 'email',
-						'remote_required' => true,
-					],
-				],
+				'default' => $mailpoet_fields,
 				'fields' => [
 					[
 						'name' => 'remote_id',
@@ -121,15 +133,27 @@ class Mailpoet3 extends Action_Base {
 			$subscriber['status'] = Subscriber::STATUS_SUBSCRIBED;
 		}
 
+		$existing_subscriber = false;
+
 		try {
 			API::MP( 'v1' )->addSubscriber( $subscriber, (array) $settings['mailpoet3_lists'] );
+			$existing_subscriber = false;
 		} catch ( \Exception $exception ) {
-			$error_id = Ajax_Handler::SERVER_ERROR;
-			if ( 'This subscriber already exists.' === $exception->getMessage() ) {
-				$error_id = Ajax_Handler::SUBSCRIBER_ALREADY_EXISTS;
-			}
+			$error_string = translate( 'This subscriber already exists.', 'mailpoet' );
 
-			$ajax_handler->add_error_message( Ajax_Handler::get_default_message( $error_id, $settings ) );
+			if ( $error_string === $exception->getMessage() ) {
+				$existing_subscriber = true;
+			} else {
+				$ajax_handler->add_admin_error_message( 'MailPoet ' . $exception->getMessage() );
+			}
+		}
+
+		if ( $existing_subscriber ) {
+			try {
+				API::MP( 'v1' )->subscribeToLists( $subscriber['email'], (array) $settings['mailpoet3_lists'] );
+			} catch ( \Exception $exception ) {
+				$ajax_handler->add_admin_error_message( 'MailPoet ' . $exception->getMessage() );
+			}
 		}
 	}
 

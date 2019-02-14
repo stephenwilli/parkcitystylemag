@@ -4,7 +4,6 @@ namespace ElementorPro\Modules\Forms\Classes;
 use Elementor\Settings;
 use Elementor\Widget_Base;
 use ElementorPro\Classes\Utils;
-use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -31,12 +30,12 @@ class Recaptcha_Handler {
 	}
 
 	public static function get_setup_message() {
-		return __( 'To use reCAPTCHA, you need to add the API key and complete the setup process in Dashboard > Elementor > Settings > reCAPTCHA.', 'elementor-pro' );
+		return __( 'To use reCAPTCHA, you need to add the API Key and complete the setup process in Dashboard > Elementor > Settings > Integrations > reCAPTCHA.', 'elementor-pro' );
 	}
 
 	public function register_admin_fields( Settings $settings ) {
 		$settings->add_section( Settings::TAB_INTEGRATIONS, 'recaptcha', [
-			'label' => __( 'reCAPTCHA', 'elementor-pro' ),
+			'label' => __( 'reCAPTCHA', 'elementor-pro' ) . ' (v2)',
 			'callback' => function() {
 				echo __( '<a target="_blank" href="https://www.google.com/recaptcha/">reCAPTCHA</a> is a free service by Google that protects your website from spam and abuse. It does this while letting your valid users pass through with ease.', 'elementor-pro' );
 			},
@@ -67,11 +66,12 @@ class Recaptcha_Handler {
 				],
 			],
 		] );
+
 		return $settings;
 	}
 
 	public function register_scripts() {
-		wp_register_script( 'elementor-recaptcha-api', 'https://www.google.com/recaptcha/api.js?render=explicit' );
+		wp_register_script( 'elementor-recaptcha-api', 'https://www.google.com/recaptcha/api.js?render=explicit', [], ELEMENTOR_PRO_VERSION );
 	}
 
 	public function enqueue_scripts() {
@@ -79,7 +79,7 @@ class Recaptcha_Handler {
 	}
 
 	/**
-	 * @param Form_Record $record
+	 * @param Form_Record  $record
 	 * @param Ajax_Handler $ajax_handler
 	 */
 	public function validation( $record, $ajax_handler ) {
@@ -95,6 +95,7 @@ class Recaptcha_Handler {
 
 		if ( empty( $_POST['g-recaptcha-response'] ) ) {
 			$ajax_handler->add_error( $field['id'], __( 'The Captcha field cannot be blank. Please enter a value.', 'elementor-pro' ) );
+
 			return;
 		}
 
@@ -122,7 +123,9 @@ class Recaptcha_Handler {
 		$response_code = wp_remote_retrieve_response_code( $response );
 
 		if ( 200 !== (int) $response_code ) {
+			/* translators: %d: Response code. */
 			$ajax_handler->add_error( $field['id'], sprintf( __( 'Can not connect to the reCAPTCHA server (%d).', 'elementor-pro' ), $response_code ) );
+
 			return;
 		}
 
@@ -183,7 +186,7 @@ class Recaptcha_Handler {
 	}
 
 	public function add_field_type( $field_types ) {
-		$field_types['recaptcha'] = __( 'Recaptcha', 'elementor-pro' );
+		$field_types['recaptcha'] = __( 'reCAPTCHA', 'elementor-pro' );
 
 		return $field_types;
 	}
