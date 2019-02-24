@@ -13,7 +13,7 @@
 	    	$healthyLivingImage = get_field('healthy_living_home_image', 'option');
 	    	$diningImage = get_field('dining_home_image', 'option');
 	    	$nightlifeImage = get_field('nightlife_home_image', 'option');
-	    	$tetonValleyImage = get_field('teton_valley_home_image', 'option');
+	    	$catalogueImage = get_field('catalogue_home_image', 'option');
 
 	    	?>
 
@@ -105,10 +105,10 @@
 	    		</div>
 	    		<div class="col-md-6 col-sm-12">
 	    			<div class="teton-valley grid-card">
-		    			<a href="/stories/teton-valley">
-		    				<img src="<?php echo $tetonValleyImage['sizes']['lg_thumb'];?>" />
+		    			<a href="/stories/park-city-style-catalogue">
+		    				<img src="<?php echo $catalogueImage['sizes']['lg_thumb'];?>" />
 		    				<div class="overlay"></div>
-				    		<h3 class="category-bar">Teton Valley</h3>
+				    		<h3 class="category-bar">Park City Style Catalogue</h3>
 				    	</a>
 	    			</div>
 	    		</div>
