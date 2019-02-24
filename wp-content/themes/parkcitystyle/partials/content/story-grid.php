@@ -66,7 +66,7 @@
 	    		<div class="col-md-6 col-sm-12">
 	    			<div class="healthy-living grid-card">
 		    			<a href="/stories/mountainstyle-living">
-		    				<img src="<?php echo $healthyLivingImage['sizes']['lg_thumb'];?>" />
+		    				<img src="<?php echo $mountainstyleLivingImage['sizes']['lg_thumb'];?>" />
 		    				<div class="overlay"></div>
 				    		<h3 class="category-bar">MountainStyle Living</h3>
 				    	</a>
