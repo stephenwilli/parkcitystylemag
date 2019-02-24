@@ -9,8 +9,7 @@
 	    	$highstyleProfileImage = get_field('highstyle_profile_home_image', 'option');
 	    	$inspireImage = get_field('inspire_home_image', 'option');
 	    	$basecampImage = get_field('basecamp_home_image', 'option');
-	    	$tetonVillageImage = get_field('teton_village_home_image', 'option');
-	    	$healthyLivingImage = get_field('healthy_living_home_image', 'option');
+	    	$mountainstyleLivingImage = get_field('mountainstyle_living_home_image', 'option');
 	    	$diningImage = get_field('dining_home_image', 'option');
 	    	$nightlifeImage = get_field('nightlife_home_image', 'option');
 	    	$catalogueImage = get_field('catalogue_home_image', 'option');
@@ -64,30 +63,21 @@
 	    	</div>
 
 	    	<div class="row">
-	    		<div class="col-md-4 col-sm-12">
-	    			<div class="teton-village grid-card">
-	    				<a href="/stories/teton-village">
-		    				<img src="<?php echo $tetonVillageImage['sizes']['lg_thumb'];?>" />
-		    				<div class="overlay"></div>
-				    		<h3 class="category-bar">Teton Village</h3>
-				    	</a>
-	    			</div>
-	    		</div>
-	    		<div class="col-md-4 col-sm-12">
+	    		<div class="col-md-6 col-sm-12">
 	    			<div class="healthy-living grid-card">
-		    			<a href="/stories/healthy-living">
+		    			<a href="/stories/mountainstyle-living">
 		    				<img src="<?php echo $healthyLivingImage['sizes']['lg_thumb'];?>" />
 		    				<div class="overlay"></div>
-				    		<h3 class="category-bar">Healthy Living</h3>
+				    		<h3 class="category-bar">MountainStyle Living</h3>
 				    	</a>
 	    			</div>
 	    		</div>
-	    		<div class="col-md-4 col-sm-12">
+	    		<div class="col-md-6 col-sm-12">
 	    			<div class="dining grid-card">
 		    			<a href="/stories/dining">
 		    				<img src="<?php echo $diningImage['sizes']['lg_thumb'];?>" />
 		    				<div class="overlay"></div>
-				    		<h3 class="category-bar">Dine in Style</h3>
+				    		<h3 class="category-bar">Dining</h3>
 				    	</a>
 	    			</div>
 	    		</div>
