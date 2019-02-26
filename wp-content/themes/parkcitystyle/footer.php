@@ -9,7 +9,7 @@
 			                $address = get_field('address', 'option');
 			            ?>
 
-							<img class="logo" src="<?php get_bloginfo('template_url') ?>/wp-content/uploads/2017/07/jhstyle-logo-01.png" />
+							<img class="logo" src="<?php get_bloginfo('template_url') ?>/wp-content/uploads/2019/02/pcstyle-logo-white.png" />
 
 
 						<p>
