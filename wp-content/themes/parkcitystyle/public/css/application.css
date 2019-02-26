@@ -8517,7 +8517,8 @@ ul {
     margin-bottom: 5px; }
 
 ol, ul {
-  list-style: none; }
+  list-style: none;
+  padding-left: 0; }
 
 img.alignleft {
   float: left;
