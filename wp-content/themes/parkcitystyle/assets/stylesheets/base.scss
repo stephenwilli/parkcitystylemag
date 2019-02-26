@@ -108,6 +108,10 @@ ul {
   }
 }
 
+ol, ul {
+  list-style: none;
+}
+
 img.alignleft {
   float: left;
   margin-right: 25px;

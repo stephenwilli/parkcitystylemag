@@ -22,10 +22,10 @@
     position: relative;
     opacity: 1;
     left: 20px;
-    width: 190px;
+    width: 220px;
     height: 100%;
     margin-left: 0 !important;
-    margin-top: 15px;
+    margin-top: 25px;
     @include transition(all .5s ease-in);
 
     &:hover {
@@ -234,7 +234,7 @@
   
   .navbar-brand{
     background-image: url('/wp-content/uploads/2019/02/pcstyle-logo-blue.png');
-    margin-top: 5px;
+    margin-top: 15px;
     width: 120px;
   }
 

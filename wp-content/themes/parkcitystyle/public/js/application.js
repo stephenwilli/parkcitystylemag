@@ -1278,7 +1278,7 @@ if (ischrome) {
       animationSpeed: 800,
       pauseOnHover: true,
       directionNav: true, //Boolean: Create navigation for previous/next navigation? (true/false)
-      controlNav: true, //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
+      controlNav: false, //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
       prevText: "",
       nextText: ""
     });

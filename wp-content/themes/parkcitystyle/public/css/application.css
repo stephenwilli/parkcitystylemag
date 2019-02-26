@@ -8516,6 +8516,9 @@ ul {
   ul li {
     margin-bottom: 5px; }
 
+ol, ul {
+  list-style: none; }
+
 img.alignleft {
   float: left;
   margin-right: 25px;
@@ -8643,10 +8646,10 @@ h3.catalogue {
   position: relative;
   opacity: 1;
   left: 20px;
-  width: 190px;
+  width: 220px;
   height: 100%;
   margin-left: 0 !important;
-  margin-top: 15px;
+  margin-top: 25px;
   transition: all 0.5s ease-in; }
   .navbar-brand:hover {
     opacity: .6; }
@@ -8789,7 +8792,7 @@ h3.catalogue {
 
 .scrolled .navbar-brand {
   background-image: url("/wp-content/uploads/2019/02/pcstyle-logo-blue.png");
-  margin-top: 5px;
+  margin-top: 15px;
   width: 120px; }
 
 .scrolled .navbar-right {
