@@ -26,7 +26,7 @@ require_once('inc/wp_bootstrap_navwalker.php' );
 require_once('inc/wp_bootstrap_pagination.php');
 
 
-// get_template_part( 'inc/register-post-type' );
+get_template_part( 'inc/register-post-type' );
 // get_template_part( 'inc/register-taxonomy' );
 get_template_part( 'inc/register-sidebars' );
 get_template_part( 'inc/register-menus' );
