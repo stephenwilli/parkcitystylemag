@@ -39,7 +39,7 @@ get_template_part( 'inc/backup-images' );
 get_template_part( 'inc/shortcodes' );
 
 // Valid constant names
-define("DEFAULTHERO", get_template_directory_uri() . '/public/images/default-header.jpg');
+define("DEFAULTHERO", get_template_directory_uri() . '/public/images/default-header-02.jpg');
 define("DEFAULTIMAGE", "http://placehold.it/500x500/e2e2e2/FFFFFF");
 define("SCRAPECACHE", false);
 define("SCRAPECACHETIME", DAY_IN_SECONDS);
