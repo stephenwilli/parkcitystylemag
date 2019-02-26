@@ -16,7 +16,7 @@
 }
 
 .navbar-brand {
-    background-image: url('/wp-content/uploads/2017/07/jhstyle-logo-01.png');
+    background-image: url('/wp-content/uploads/2019/02/pcstyle-logo-white.png');
     background-repeat: no-repeat;
     background-size: contain;
     position: relative;
@@ -37,7 +37,7 @@
     }
 
     @include respond-to($screen-xs) {   
-      background-image: url('/wp-content/uploads/2017/07/jhstyle-01.png');
+      background-image: url('/wp-content/uploads/2019/02/pcstyle-logo-blue.png');
       width: 180px;
     }
 
@@ -225,7 +225,7 @@
 .collapsed {
   
   .navbar-brand{
-    background-image: url('/wp-content/uploads/2017/07/jhstyle-01.png');
+    background-image: url('/wp-content/uploads/2019/02/pcstyle-logo-blue.png');
     width: 120px;
   }
 }
@@ -233,7 +233,7 @@
 .scrolled {
   
   .navbar-brand{
-    background-image: url('/wp-content/uploads/2017/07/jhstyle-01.png');
+    background-image: url('/wp-content/uploads/2019/02/pcstyle-logo-blue.png');
     margin-top: 5px;
     width: 120px;
   }
