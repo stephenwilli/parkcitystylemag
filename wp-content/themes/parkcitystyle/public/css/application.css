@@ -8662,7 +8662,7 @@ h3.catalogue {
       width: 180px; } }
 
 .navbar-right {
-  margin-top: 20px;
+  margin-top: 25px;
   margin-right: 110px !important;
   transition: all 0.5s ease-in; }
   @media all and (max-width: 992px) {
