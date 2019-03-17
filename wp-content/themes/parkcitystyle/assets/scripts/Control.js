@@ -20,9 +20,9 @@ var Control = function($) { // ----- static module
         namespace:          "flex-",
         animation:          "slide",
         slideshow:          false, // auto play on load
-        slideshowSpeed:     2000,
+        slideshowSpeed:     4000,
         animationSpeed:     500,
-        pauseOnHover:       true,
+        pauseOnHover:       false,
         controlNav:         false, //Boolean: Create navigation for paging control of each clide? Note: Leave true for manualControls usage
         directionNav:       true, //Boolean: Create navigation for previous/next navigation? (true/false)
         prevText:           "Previous",
